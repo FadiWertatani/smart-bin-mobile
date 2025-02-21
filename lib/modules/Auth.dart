@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:smar_bin/modules/Login.dart';
+import 'package:smar_bin/modules/Register.dart';
+import 'package:smar_bin/shared/components/navigator.dart';
 
 class AuthScreen extends StatelessWidget {
   const AuthScreen({Key? key}) : super(key: key);
@@ -56,7 +59,7 @@ class AuthScreen extends StatelessWidget {
                       height: 56,
                       child: ElevatedButton(
                         onPressed: () {
-                          // Handle login
+                          normalPush(context: context, direction: LoginScreen());
                         },
                         style: ElevatedButton.styleFrom(
                           backgroundColor: const Color(0xFF5EACC1),
@@ -83,7 +86,7 @@ class AuthScreen extends StatelessWidget {
                       height: 56,
                       child: OutlinedButton(
                         onPressed: () {
-                          // Handle sign up
+                          normalPush(context: context, direction: RegisterScreen());
                         },
                         style: OutlinedButton.styleFrom(
                           foregroundColor: const Color(0xFF5EACC1),

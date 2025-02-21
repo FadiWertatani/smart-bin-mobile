@@ -99,7 +99,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                     if (isLast == true) {
                       noBackPush(
                         context: context,
-                        direction: Homescreen(),
+                        direction: HomeScreen(),
                       );
                     } else {
                       _boardingController.nextPage(
