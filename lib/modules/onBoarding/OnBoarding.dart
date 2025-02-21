@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:smar_bin/modules/Auth.dart';
 import 'package:smar_bin/modules/HomeScreen.dart';
 import 'package:smar_bin/shared/components/navigator.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
@@ -47,7 +48,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
             onPressed: () {
               noBackPush(
                 context: context,
-                direction: Homescreen(),
+                direction: AuthScreen(),
               );
             },
             child: const Text(
