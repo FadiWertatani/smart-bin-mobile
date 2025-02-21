@@ -18,6 +18,13 @@ class MyApp extends StatelessWidget {
           primary: const Color(0xff589FB6),
           secondary: const Color(0xff76B4C0),
         ),
+        textTheme: const TextTheme(
+          displayMedium: TextStyle(
+            fontSize: 18.0,
+            fontWeight: FontWeight.w600,
+            color: Colors.black,
+          ),
+        ),
         useMaterial3: true,
       ),
       home: const MyHomePage(title: 'Flutter Demo Home Page'),
