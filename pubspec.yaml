@@ -42,6 +42,8 @@ dependencies:
   #icons
   iconsax: ^0.0.8
 
+  dropdown_search: ^5.0.6
+
 
 
 
