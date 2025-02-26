@@ -4,6 +4,7 @@ import 'package:dropdown_search/dropdown_search.dart';
 import 'package:smar_bin/modules/Login.dart';
 import 'package:smar_bin/shared/components/component.dart';
 import 'package:smar_bin/shared/components/navigator.dart';
+import 'package:dio/dio.dart'; // Import Dio package
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({Key? key}) : super(key: key);
@@ -17,6 +18,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
   bool _agreeToTerms = false;
   String? selectedClinic;
 
+  final TextEditingController _nameController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+
   final List<String> clinics = [
     "City Hospital",
     "Green Valley Clinic",
@@ -25,6 +30,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
     "Wellness Center",
     "Metro Healthcare"
   ];
+
+  final Dio _dio = Dio();
 
   @override
   Widget build(BuildContext context) {
@@ -52,11 +59,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   // Name field
-                  _buildInputField(Iconsax.personalcard, 'Enter your name'),
+                  _buildInputField(Iconsax.personalcard, 'Enter your name', _nameController),
                   const SizedBox(height: 16),
 
                   // Email field
-                  _buildInputField(Iconsax.direct, 'Enter your email'),
+                  _buildInputField(Iconsax.direct, 'Enter your email', _emailController),
                   const SizedBox(height: 16),
 
                   // Clinic Dropdown (Searchable)
@@ -121,13 +128,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
   }
 
   // Reusable Input Field
-  Widget _buildInputField(IconData icon, String hintText) {
+  Widget _buildInputField(IconData icon, String hintText, TextEditingController controller) {
     return Container(
       decoration: BoxDecoration(
         color: Colors.grey.shade100,
         borderRadius: BorderRadius.circular(30),
       ),
       child: TextField(
+        controller: controller,
         decoration: InputDecoration(
           hintText: hintText,
           hintStyle: TextStyle(color: Colors.grey.shade500),
@@ -147,6 +155,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
         borderRadius: BorderRadius.circular(30),
       ),
       child: TextField(
+        controller: _passwordController,
         obscureText: _obscurePassword,
         decoration: InputDecoration(
           hintText: 'Enter your password',
@@ -227,9 +236,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
       width: double.infinity,
       height: 56,
       child: ElevatedButton(
-        onPressed: _agreeToTerms ? () {
-          showSuccessDialog(context);
-        } : null,
+        onPressed: _agreeToTerms ? _registerUser : null,
         style: ElevatedButton.styleFrom(
           backgroundColor: const Color(0xFF5EACC1),
           foregroundColor: Colors.white,
@@ -276,6 +283,80 @@ class _RegisterScreenState extends State<RegisterScreen> {
           ),
         ),
       ],
+    );
+  }
+
+  // Register the user
+  Future<void> _registerUser() async {
+    if (_nameController.text.isEmpty || _emailController.text.isEmpty || _passwordController.text.isEmpty || selectedClinic == null) {
+      showErrorDialog(context, 'Please fill all fields');
+      return;
+    }
+
+    try {
+      final response = await _dio.post(
+        'http://192.168.1.19:5000/register', // Replace with your actual API endpoint
+        data: {
+          'name': _nameController.text,
+          'email': _emailController.text,
+          'password': _passwordController.text,
+          'clinic': selectedClinic,
+        },
+      );
+
+      if (response.statusCode == 200) {
+        showSuccessDialog(context);
+      } else if (response.statusCode == 201) {
+        showSuccessDialog(context);
+      } else {
+        showErrorDialog(context, 'Registration failed with status: ${response.statusCode}');
+      }
+
+    } catch (e) {
+      print("Error occurred: $e"); // Log the error
+      showErrorDialog(context, 'An error occurred: $e');
+    }
+  }
+
+
+  // Show success dialog
+  void showSuccessDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          content: const Text('Registration successful!'),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+                normalPush(context: context, direction: LoginScreen());
+              },
+              child: const Text('OK'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  // Show error dialog
+  void showErrorDialog(BuildContext context, String message) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          content: Text(message),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: const Text('OK'),
+            ),
+          ],
+        );
+      },
     );
   }
 }

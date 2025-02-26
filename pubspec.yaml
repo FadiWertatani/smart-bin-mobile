@@ -44,6 +44,9 @@ dependencies:
 
   dropdown_search: ^5.0.6
 
+  #Communication
+  dio: ^5.8.0+1
+
 
 
 
