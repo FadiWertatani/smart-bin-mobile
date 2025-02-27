@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:smar_bin/modules/Login.dart';
+import 'package:smar_bin/services/api_service.dart';
 import 'package:smar_bin/shared/components/component.dart';
 import 'package:smar_bin/shared/components/navigator.dart';
 import 'package:dio/dio.dart'; // Import Dio package
@@ -32,6 +33,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
   ];
 
   final Dio _dio = Dio();
+
+  final ApiService _apiService = ApiService(); // Use the singleton instance
 
   @override
   Widget build(BuildContext context) {
@@ -286,35 +289,23 @@ class _RegisterScreenState extends State<RegisterScreen> {
     );
   }
 
-  // Register the user
   Future<void> _registerUser() async {
     if (_nameController.text.isEmpty || _emailController.text.isEmpty || _passwordController.text.isEmpty || selectedClinic == null) {
       showErrorDialog(context, 'Please fill all fields');
       return;
     }
 
-    try {
-      final response = await _dio.post(
-        'http://192.168.1.19:5000/register', // Replace with your actual API endpoint
-        data: {
-          'name': _nameController.text,
-          'email': _emailController.text,
-          'password': _passwordController.text,
-          'clinic': selectedClinic,
-        },
-      );
+    String responseMessage = await _apiService.registerUser(
+      _nameController.text,
+      _emailController.text,
+      _passwordController.text,
+      selectedClinic!,
+    );
 
-      if (response.statusCode == 200) {
-        showSuccessDialog(context);
-      } else if (response.statusCode == 201) {
-        showSuccessDialog(context);
-      } else {
-        showErrorDialog(context, 'Registration failed with status: ${response.statusCode}');
-      }
-
-    } catch (e) {
-      print("Error occurred: $e"); // Log the error
-      showErrorDialog(context, 'An error occurred: $e');
+    if (responseMessage.contains('success')) {
+      showSuccessDialog(context);
+    } else {
+      showErrorDialog(context, responseMessage);
     }
   }
 
