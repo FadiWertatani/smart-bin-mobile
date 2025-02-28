@@ -1,8 +1,33 @@
 import 'package:flutter/material.dart';
+import 'package:qr_flutter/qr_flutter.dart';
+import 'package:smar_bin/services/SharedPrefsHelper.dart';
+import 'package:smar_bin/services/api_service.dart';
+import 'package:uuid/uuid.dart';
 
-class QrCodeScreen extends StatelessWidget {
-  const QrCodeScreen({Key? key}) : super(key: key);
+class QrCodeScreen extends StatefulWidget {
+  QrCodeScreen({Key? key}) : super(key: key);
 
+  @override
+  State<QrCodeScreen> createState() => _QrCodeScreenState();
+}
+
+class _QrCodeScreenState extends State<QrCodeScreen> {
+
+  String? _userCode; // To store the user code
+
+  Future<String?> userEmail = SharedPrefsHelper.getEmail();
+
+  // Fetch the user code from the API
+  Future<void> _fetchUserCode() async {
+    String? userCode = await ApiService().fetchUserCode(userEmail as String);
+
+    setState(() {
+      _userCode = userCode;  // Update the user code when fetched
+    });
+  }
+
+  final String uniqueCode = const Uuid().v4();
+ // Generate a unique random code
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -34,21 +59,16 @@ class QrCodeScreen extends StatelessWidget {
         child: Column(
           children: [
             const Spacer(flex: 1),
-            // QR Code Image
-            Container(
-              width: 220,
-              height: 220,
-              child: Image.asset(
-                'assets/images/qr_code.png',
-                // color: const Color(0xFF5EACC1),
-                fit: BoxFit.contain,
-              ),
-              // Alternative: If you're loading from network
-              // child: Image.network(
-              //   'https://your-api.com/qr-codes/your-unique-code',
-              //   color: const Color(0xFF5EACC1),
-              //   fit: BoxFit.contain,
-              // ),
+            // QR Code Generation
+            QrImageView(
+              data: uniqueCode, // Use the generated unique code
+              version: QrVersions.auto,
+              size: 220,
+            ),
+            const SizedBox(height: 16),
+            Text(
+              'Scan this QR Code',
+              style: TextStyle(fontSize: 16, color: Colors.black87),
             ),
             const Spacer(flex: 2),
             // Done button
