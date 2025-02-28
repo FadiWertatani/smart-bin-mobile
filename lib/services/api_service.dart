@@ -12,7 +12,7 @@ class ApiService {
 
   // Dio instance
   final Dio _dio = Dio(BaseOptions(
-    baseUrl: 'http://172.16.6.179:5000', // Replace with your actual IP
+    baseUrl: 'http://192.168.1.19:5000', // Replace with your actual IP
     connectTimeout: Duration(seconds: 10),
     receiveTimeout: Duration(seconds: 10),
   ));
@@ -31,4 +31,19 @@ class ApiService {
       return 'Registration failed: $e';
     }
   }
+
+  // Login function
+  Future<Map<String, dynamic>> loginUser(String email, String password) async {
+    try {
+      Response response = await _dio.post('/login', data: {
+        'email': email,
+        'password': password,
+      });
+
+      return response.data; // Expecting JSON response
+    } catch (e) {
+      return {'error': 'Login failed: $e'};
+    }
+  }
+
 }
