@@ -20,6 +20,7 @@ class _QrCodeScreenState extends State<QrCodeScreen> {
   void initState() {
     super.initState();
     _loadUserCode(); // Load user code on screen initialization
+    print("USER CODE: "+userCode.toString());
   }
 
   Future<void> _loadUserCode() async {

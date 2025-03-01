@@ -112,16 +112,7 @@ class AuthScreen extends StatelessWidget {
               ),
 
               // Bottom area
-              const SizedBox(height: 24),
-              Container(
-                height: 5,
-                width: 134,
-                decoration: BoxDecoration(
-                  color: Colors.black,
-                  borderRadius: BorderRadius.circular(2.5),
-                ),
-              ),
-              const SizedBox(height: 8),
+              const SizedBox(height: 40),
             ],
           ),
         ),

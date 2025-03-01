@@ -57,6 +57,16 @@ class ApiService {
       });
 
       if (response.statusCode == 200) {
+
+        Map<String, dynamic> userData = response.data['user'];
+        String token = response.data['token']; // JWT Token
+        String userCode = userData['user_code']; // Retrieve user_code
+
+        // Store email, token, and user_code in SharedPreferences
+        await SharedPrefsHelper.saveEmail(email);
+        await SharedPrefsHelper.saveToken(token);
+        await SharedPrefsHelper.saveUserCode(userCode);
+
         // Store email in SharedPreferences on successful login
         await SharedPrefsHelper.saveEmail(email);
         return response.data;  // Assuming response contains user info

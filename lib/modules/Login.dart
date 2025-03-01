@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:smar_bin/modules/HomeScreen.dart';
 import 'package:smar_bin/modules/Register.dart';
+import 'package:smar_bin/services/SharedPrefsHelper.dart';
 import 'package:smar_bin/services/api_service.dart';
 import 'package:smar_bin/shared/components/navigator.dart';
 
@@ -40,9 +41,22 @@ class _LoginScreenState extends State<LoginScreen> {
       var response = await ApiService().loginUser(email, password);
 
       if (response.containsKey('token')) {
+
+
+        // Fetch the user code after login
+        String? userCode = await ApiService().fetchUserCode(email);
+
+        if (userCode != null) {
+          // Save user_code if not already stored
+          if (SharedPrefsHelper.getUserCode() == null) {
+            SharedPrefsHelper.saveUserCode(userCode);
+            print("USER CODE: $userCode");
+          }
+        }
+
+
         // Store token if necessary and navigate to home screen
         normalPush(context: context, direction: HomeScreen());
-
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text(response['error'] ?? 'Login failed')),

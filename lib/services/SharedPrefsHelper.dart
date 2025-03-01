@@ -30,4 +30,16 @@ class SharedPrefsHelper {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     return prefs.getString('user_code');
   }
+
+  // Save user code to SharedPreferences
+  static Future<void> saveToken(String userCode) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setString('token', userCode);
+  }
+
+  // Retrieve user code from SharedPreferences
+  static Future<String?> getToken() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    return prefs.getString('token');
+  }
 }
