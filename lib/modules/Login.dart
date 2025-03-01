@@ -3,7 +3,6 @@ import 'package:iconsax/iconsax.dart';
 import 'package:smar_bin/modules/HomeScreen.dart';
 import 'package:smar_bin/modules/Register.dart';
 import 'package:smar_bin/services/api_service.dart';
-import 'package:smar_bin/shared/components/component.dart';
 import 'package:smar_bin/shared/components/navigator.dart';
 
 class LoginScreen extends StatefulWidget {

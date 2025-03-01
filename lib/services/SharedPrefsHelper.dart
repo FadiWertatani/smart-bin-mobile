@@ -18,4 +18,16 @@ class SharedPrefsHelper {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.remove('email');
   }
+
+  // Save user code to SharedPreferences
+  static Future<void> saveUserCode(String userCode) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setString('user_code', userCode);
+  }
+
+  // Retrieve user code from SharedPreferences
+  static Future<String?> getUserCode() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    return prefs.getString('user_code');
+  }
 }

@@ -35,9 +35,10 @@ class ApiService {
         'user_code': userCode,
       });
 
-      if (response.statusCode == 200) {
+      if (response.statusCode == 200 || response.statusCode == 201) {
         // Store email in SharedPreferences on successful registration
         await SharedPrefsHelper.saveEmail(email);
+        await SharedPrefsHelper.saveUserCode(userCode);
         return response.data['message'];  // Assuming API returns message
       } else {
         return 'Registration failed: ${response.statusCode}';

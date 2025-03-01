@@ -32,8 +32,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
     "Metro Healthcare"
   ];
 
-  final Dio _dio = Dio();
-
   final ApiService _apiService = ApiService(); // Use the singleton instance
 
   @override

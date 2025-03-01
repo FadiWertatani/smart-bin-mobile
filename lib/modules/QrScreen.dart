@@ -13,21 +13,23 @@ class QrCodeScreen extends StatefulWidget {
 
 class _QrCodeScreenState extends State<QrCodeScreen> {
 
-  String? _userCode; // To store the user code
+  String? userCode; // Holds the loaded user code
+  bool isLoading = true; // Loading state
 
-  Future<String?> userEmail = SharedPrefsHelper.getEmail();
+  @override
+  void initState() {
+    super.initState();
+    _loadUserCode(); // Load user code on screen initialization
+  }
 
-  // Fetch the user code from the API
-  Future<void> _fetchUserCode() async {
-    String? userCode = await ApiService().fetchUserCode(userEmail as String);
-
+  Future<void> _loadUserCode() async {
+    String? code = await SharedPrefsHelper.getUserCode();
     setState(() {
-      _userCode = userCode;  // Update the user code when fetched
+      userCode = code ?? 'No Code Found'; // Default value if null
+      isLoading = false;
     });
   }
 
-  final String uniqueCode = const Uuid().v4();
- // Generate a unique random code
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -61,7 +63,7 @@ class _QrCodeScreenState extends State<QrCodeScreen> {
             const Spacer(flex: 1),
             // QR Code Generation
             QrImageView(
-              data: uniqueCode, // Use the generated unique code
+              data: userCode.toString(), // Use the generated unique code
               version: QrVersions.auto,
               size: 220,
             ),
