@@ -44,14 +44,20 @@ dependencies:
 
   dropdown_search: ^5.0.6
 
-  #Communication
-  dio: ^5.8.0+1
-
   #Qr
   uuid: ^4.5.1
   qr_flutter: ^4.1.0
 
+  #tools
   shared_preferences: ^2.5.2
+  dio: ^5.8.0+1
+  bloc: ^9.0.0
+  flutter_bloc: ^9.1.0
+
+  sliding_clipped_nav_bar: ^3.1.0+4
+
+
+  persistent_bottom_nav_bar: ^6.2.1
 
 
 

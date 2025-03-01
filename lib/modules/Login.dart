@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:smar_bin/modules/HomeLayout.dart';
 import 'package:smar_bin/modules/HomeScreen.dart';
 import 'package:smar_bin/modules/Register.dart';
 import 'package:smar_bin/services/SharedPrefsHelper.dart';
@@ -56,7 +57,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
 
         // Store token if necessary and navigate to home screen
-        normalPush(context: context, direction: HomeScreen());
+        normalPush(context: context, direction: HomeLayout());
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text(response['error'] ?? 'Login failed')),
