@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
-import 'package:smar_bin/modules/HomeLayout.dart';
+import 'package:smar_bin/layout/HomeLayout.dart';
 import 'package:smar_bin/modules/HomeScreen.dart';
 import 'package:smar_bin/modules/Register.dart';
 import 'package:smar_bin/services/SharedPrefsHelper.dart';
