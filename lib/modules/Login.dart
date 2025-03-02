@@ -20,53 +20,69 @@ class _LoginScreenState extends State<LoginScreen> {
   bool _obscurePassword = true;
   bool _isLoading = false;
 
+  // Fonction pour afficher un message
+  void _showMessage(String message, bool isError) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(message),
+        backgroundColor: isError ? Colors.red : Colors.green,
+        duration: const Duration(seconds: 3),
+      ),
+    );
+  }
+
   void _login() async {
+    // Récupération des valeurs
+    final email = _emailController.text.trim();
+    final password = _passwordController.text;
+
+    // Vérification des champs vides
+    if (email.isEmpty || password.isEmpty) {
+      _showMessage("Email et mot de passe sont requis", true);
+      return;
+    }
+
     setState(() {
       _isLoading = true;
     });
 
-    String email = _emailController.text.trim();
-    String password = _passwordController.text.trim();
-
-    if (email.isEmpty || password.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Please enter email and password')),
-      );
-      setState(() {
-        _isLoading = false;
-      });
-      return;
-    }
-
     try {
       var response = await ApiService().loginUser(email, password);
 
-      if (response.containsKey('token')) {
-
-
-        // Fetch the user code after login
+      if (response.containsKey('error')) {
+        // Gestion des différents types d'erreurs
+        String errorMessage = response['error'];
+        if (errorMessage.contains('not found')) {
+          _showMessage("Adresse email invalide", true);
+        } else if (errorMessage.contains('password')) {
+          _showMessage("Mot de passe incorrect", true);
+        } else {
+          _showMessage(errorMessage, true);
+        }
+      } else if (response.containsKey('token')) {
+        // Récupération du user_code
         String? userCode = await ApiService().fetchUserCode(email);
 
         if (userCode != null) {
-          // Save user_code if not already stored
-          if (SharedPrefsHelper.getUserCode() == null) {
-            SharedPrefsHelper.saveUserCode(userCode);
-            print("USER CODE: $userCode");
+          // Sauvegarde du user_code si nécessaire
+          if (await SharedPrefsHelper.getUserCode() == null) {
+            await SharedPrefsHelper.saveUserCode(userCode);
           }
         }
 
-
-        // Store token if necessary and navigate to home screen
-        normalPush(context: context, direction: HomeLayout());
-      } else {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(response['error'] ?? 'Login failed')),
-        );
+        // Message de succès et navigation
+        _showMessage("Connexion réussie", false);
+        
+        // Attendre que le message soit affiché avant de naviguer
+        await Future.delayed(const Duration(seconds: 1));
+        
+        // Navigation vers la page d'accueil
+        if (mounted) {
+          normalPush(context: context, direction: HomeLayout());
+        }
       }
     } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Error: $e')),
-      );
+      _showMessage("Erreur de connexion: $e", true);
       print(e);
     }
 

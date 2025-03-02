@@ -42,4 +42,12 @@ class SharedPrefsHelper {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     return prefs.getString('token');
   }
+
+  // Clear all user data from SharedPreferences
+  static Future<void> clearUserData() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.remove('email');
+    await prefs.remove('user_code');
+    await prefs.remove('token');
+  }
 }

@@ -34,6 +34,52 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
   final ApiService _apiService = ApiService(); // Use the singleton instance
 
+  // Validation functions
+  bool _isValidName(String name) {
+    final nameRegex = RegExp(r'^[a-zA-Z\s]+$');
+    return nameRegex.hasMatch(name);
+  }
+
+  bool _isValidEmail(String email) {
+    final emailRegex = RegExp(r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$');
+    return emailRegex.hasMatch(email);
+  }
+
+  bool _isValidPassword(String password) {
+    if (password.length < 8) return false;
+    
+    final hasUpperCase = RegExp(r'[A-Z]').hasMatch(password);
+    final hasLowerCase = RegExp(r'[a-z]').hasMatch(password);
+    final hasDigit = RegExp(r'[0-9]').hasMatch(password);
+    final hasSpecialChar = RegExp(r'[!@#$%^&*(),.?":{}|<>]').hasMatch(password);
+    
+    return hasUpperCase && hasLowerCase && hasDigit && hasSpecialChar;
+  }
+
+  String? _getPasswordErrorText(String password) {
+    if (password.isEmpty) return null;
+    
+    List<String> errors = [];
+    
+    if (password.length < 8) {
+      errors.add("• Le mot de passe doit contenir au moins 8 caractères");
+    }
+    if (!RegExp(r'[A-Z]').hasMatch(password)) {
+      errors.add("• Au moins une lettre majuscule");
+    }
+    if (!RegExp(r'[a-z]').hasMatch(password)) {
+      errors.add("• Au moins une lettre minuscule");
+    }
+    if (!RegExp(r'[0-9]').hasMatch(password)) {
+      errors.add("• Au moins un chiffre");
+    }
+    if (!RegExp(r'[!@#$%^&*(),.?":{}|<>]').hasMatch(password)) {
+      errors.add("• Au moins un caractère spécial (!@#\$%^&*(),.?\":{}|<>)");
+    }
+    
+    return errors.isEmpty ? null : errors.join('\n');
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -150,33 +196,52 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
   // Password Field
   Widget _buildPasswordField() {
-    return Container(
-      decoration: BoxDecoration(
-        color: Colors.grey.shade100,
-        borderRadius: BorderRadius.circular(30),
-      ),
-      child: TextField(
-        controller: _passwordController,
-        obscureText: _obscurePassword,
-        decoration: InputDecoration(
-          hintText: 'Enter your password',
-          hintStyle: TextStyle(color: Colors.grey.shade500),
-          prefixIcon: Icon(Iconsax.lock, color: Colors.grey.shade500),
-          suffixIcon: GestureDetector(
-            onTap: () {
-              setState(() {
-                _obscurePassword = !_obscurePassword;
-              });
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Container(
+          decoration: BoxDecoration(
+            color: Colors.grey.shade100,
+            borderRadius: BorderRadius.circular(30),
+          ),
+          child: TextField(
+            controller: _passwordController,
+            obscureText: _obscurePassword,
+            onChanged: (value) {
+              setState(() {}); // Refresh to show/hide error text
             },
-            child: Icon(
-              _obscurePassword ? Icons.visibility_off_outlined : Icons.visibility_outlined,
-              color: Colors.grey.shade500,
+            decoration: InputDecoration(
+              hintText: 'Enter your password',
+              hintStyle: TextStyle(color: Colors.grey.shade500),
+              prefixIcon: Icon(Iconsax.lock, color: Colors.grey.shade500),
+              suffixIcon: GestureDetector(
+                onTap: () {
+                  setState(() {
+                    _obscurePassword = !_obscurePassword;
+                  });
+                },
+                child: Icon(
+                  _obscurePassword ? Icons.visibility_off_outlined : Icons.visibility_outlined,
+                  color: Colors.grey.shade500,
+                ),
+              ),
+              border: InputBorder.none,
+              contentPadding: const EdgeInsets.symmetric(vertical: 16),
             ),
           ),
-          border: InputBorder.none,
-          contentPadding: const EdgeInsets.symmetric(vertical: 16),
         ),
-      ),
+        if (_passwordController.text.isNotEmpty)
+          Padding(
+            padding: const EdgeInsets.only(top: 8.0, left: 16.0),
+            child: Text(
+              _getPasswordErrorText(_passwordController.text) ?? "Mot de passe valide ✓",
+              style: TextStyle(
+                color: _isValidPassword(_passwordController.text) ? Colors.green : Colors.red,
+                fontSize: 12,
+              ),
+            ),
+          ),
+      ],
     );
   }
 
@@ -288,15 +353,56 @@ class _RegisterScreenState extends State<RegisterScreen> {
   }
 
   Future<void> _registerUser() async {
-    if (_nameController.text.isEmpty || _emailController.text.isEmpty || _passwordController.text.isEmpty || selectedClinic == null) {
-      showErrorDialog(context, 'Please fill all fields');
+    // Récupération des valeurs
+    final name = _nameController.text.trim();
+    final email = _emailController.text.trim();
+    final password = _passwordController.text;
+    
+    // Liste pour stocker les messages d'erreur
+    List<String> errors = [];
+
+    // Validation du nom
+    if (name.isEmpty) {
+      errors.add("Le nom est requis");
+    } else if (!_isValidName(name)) {
+      errors.add("Le nom ne doit contenir que des lettres");
+    }
+
+    // Validation de l'email
+    if (email.isEmpty) {
+      errors.add("L'email est requis");
+    } else if (!_isValidEmail(email)) {
+      errors.add("Format d'email invalide");
+    }
+
+    // Validation du mot de passe
+    if (password.isEmpty) {
+      errors.add("Le mot de passe est requis");
+    } else if (!_isValidPassword(password)) {
+      errors.add("Le mot de passe ne respecte pas les critères de sécurité");
+    }
+
+    // Validation de la clinique
+    if (selectedClinic == null) {
+      errors.add("Veuillez sélectionner une clinique");
+    }
+
+    // Vérification des termes et conditions
+    if (!_agreeToTerms) {
+      errors.add("Veuillez accepter les termes et conditions");
+    }
+
+    // S'il y a des erreurs, on les affiche
+    if (errors.isNotEmpty) {
+      showErrorDialog(context, errors.join('\n'));
       return;
     }
 
+    // Si tout est valide, on procède à l'inscription
     String responseMessage = await _apiService.registerUser(
-      _nameController.text,
-      _emailController.text,
-      _passwordController.text,
+      name,
+      email,
+      password,
       selectedClinic!,
     );
 
@@ -306,7 +412,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
       showErrorDialog(context, responseMessage);
     }
   }
-
 
   // Show success dialog
   void showSuccessDialog(BuildContext context) {

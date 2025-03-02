@@ -1,8 +1,11 @@
 import 'package:dio/dio.dart';
 import 'package:smar_bin/services/SharedPrefsHelper.dart';
 import 'package:uuid/uuid.dart';
+import 'dart:io';
 
 class ApiService {
+  static const String BASE_URL = 'http://192.168.16.1:5000';
+
   // Private constructor
   ApiService._internal();
 
@@ -14,10 +17,9 @@ class ApiService {
 
   final Uuid _uuid = Uuid();
 
-
   // Dio instance
   final Dio _dio = Dio(BaseOptions(
-    baseUrl: 'http://192.168.1.19:5000', // Replace with your actual IP
+    baseUrl: 'http://192.168.16.1:5000', // Replace with your actual IP
     connectTimeout: Duration(seconds: 10),
     receiveTimeout: Duration(seconds: 10),
   ));
@@ -95,5 +97,41 @@ class ApiService {
     }
   }
 
+  Future<bool> uploadProfileImage(String userCode, File imageFile) async {
+    try {
+      String fileName = imageFile.path.split('/').last;
+      FormData formData = FormData.fromMap({
+        'image': await MultipartFile.fromFile(imageFile.path, filename: fileName),
+        'user_code': userCode,
+      });
 
+      Response response = await _dio.post('/upload-profile-image', data: formData);
+      return response.statusCode == 200;
+    } catch (e) {
+      print('Error uploading image: $e');
+      return false;
+    }
+  }
+
+  Future<Map<String, dynamic>> getUserData(String userCode) async {
+    try {
+      Response response = await _dio.get('/user/$userCode/data');
+      if (response.statusCode == 200) {
+        return response.data;
+      } else {
+        return {
+          'error': 'Erreur lors de la récupération des données',
+          'name': '',
+          'points': [],
+        };
+      }
+    } catch (e) {
+      print('Error getting user data: $e');
+      return {
+        'error': 'Erreur lors de la récupération des données',
+        'name': '',
+        'points': [],
+      };
+    }
+  }
 }
