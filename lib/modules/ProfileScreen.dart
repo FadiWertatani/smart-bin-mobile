@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:smar_bin/modules/Auth.dart';
 import 'dart:io';
 import 'package:smar_bin/services/api_service.dart';
 import 'package:smar_bin/services/SharedPrefsHelper.dart';
 import 'package:intl/intl.dart';
+import 'package:smar_bin/shared/components/navigator.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({Key? key}) : super(key: key);
@@ -69,16 +71,19 @@ class _ProfileScreenState extends State<ProfileScreen> {
         });
         String? userCode = await SharedPrefsHelper.getUserCode();
         if (userCode != null) {
-          bool success = await ApiService().uploadProfileImage(userCode, _imageFile!);
+          bool success =
+              await ApiService().uploadProfileImage(userCode, _imageFile!);
           if (success) {
             ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text('Photo de profil mise à jour avec succès')),
+              SnackBar(
+                  content: Text('Photo de profil mise à jour avec succès')),
             );
             // Rechargez les données utilisateur pour afficher la nouvelle image
             _loadUserData();
           } else {
             ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text('Erreur lors de la mise à jour de la photo')),
+              SnackBar(
+                  content: Text('Erreur lors de la mise à jour de la photo')),
             );
           }
         }
@@ -187,8 +192,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               backgroundImage: _imageFile != null
                                   ? FileImage(_imageFile!) as ImageProvider
                                   : (userData['profile_image'] != null
-                                      ? NetworkImage('${ApiService.BASE_URL}/uploads/${userData['profile_image']}')
-                                      : AssetImage('assets/images/doctor.jpg')) as ImageProvider,
+                                          ? NetworkImage(
+                                              '${ApiService.BASE_URL}/uploads/${userData['profile_image']}')
+                                          : AssetImage(
+                                              'assets/images/doctor.jpg'))
+                                      as ImageProvider,
                             ),
                             Positioned(
                               right: 0,
@@ -262,7 +270,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         ),
                         _buildMenuItem(
                           icon: Icons.logout,
-                          title: 'Déconnexion',
+                          title: 'Logout',
                           isLogout: true,
                           onTap: () => _showLogoutDialog(context),
                         ),
@@ -340,7 +348,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               ),
               SizedBox(height: 20),
               Text(
-                'Êtes-vous sûr de vouloir vous déconnecter ?',
+                'Do you want to logout ?',
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: 16,
@@ -349,10 +357,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
               ),
               SizedBox(height: 20),
               ElevatedButton(
-                onPressed: () {
+                onPressed: () async {
+                  await ApiService().logoutUser();
                   Navigator.of(context).pop();
-                  // Ajoutez ici la logique de déconnexion
-                  Navigator.of(context).pushReplacementNamed('/login');
+                  noBackPush(context: context, direction: AuthScreen());
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: const Color(0xff589FB6),
@@ -361,13 +369,17 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     borderRadius: BorderRadius.circular(25),
                   ),
                 ),
-                child: Text('Déconnexion'),
+                child: Text(
+                    style: TextStyle(
+                      color: Colors.white,
+                    ),
+                    'Logout'),
               ),
               SizedBox(height: 10),
               TextButton(
                 onPressed: () => Navigator.of(context).pop(),
                 child: Text(
-                  'Annuler',
+                  'Cancel',
                   style: TextStyle(color: Colors.grey),
                 ),
               ),

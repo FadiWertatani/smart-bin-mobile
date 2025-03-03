@@ -50,4 +50,12 @@ class SharedPrefsHelper {
     await prefs.remove('user_code');
     await prefs.remove('token');
   }
+
+  static Future<void> clearData() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.remove('email');
+    await prefs.remove('user_code');
+    await prefs.remove('token');
+  }
+
 }

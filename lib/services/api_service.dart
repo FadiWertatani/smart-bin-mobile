@@ -19,7 +19,7 @@ class ApiService {
 
   // Dio instance
   final Dio _dio = Dio(BaseOptions(
-    baseUrl: 'http://192.168.16.1:5000', // Replace with your actual IP
+    baseUrl: 'http://192.168.1.19:5000', // Replace with your actual IP
     connectTimeout: Duration(seconds: 10),
     receiveTimeout: Duration(seconds: 10),
   ));
@@ -50,7 +50,6 @@ class ApiService {
     }
   }
 
-  // Login function
   Future<Map<String, dynamic>> loginUser(String email, String password) async {
     try {
       Response response = await _dio.post('/login', data: {
@@ -58,27 +57,56 @@ class ApiService {
         'password': password,
       });
 
-      if (response.statusCode == 200) {
+      // If request succeeds, process the response
+      Map<String, dynamic> userData = response.data['user'];
+      String token = response.data['token'];
+      String userCode = userData['user_code'];
 
-        Map<String, dynamic> userData = response.data['user'];
-        String token = response.data['token']; // JWT Token
-        String userCode = userData['user_code']; // Retrieve user_code
+      // Save data in SharedPreferences
+      await SharedPrefsHelper.saveEmail(email);
+      await SharedPrefsHelper.saveToken(token);
+      await SharedPrefsHelper.saveUserCode(userCode);
 
-        // Store email, token, and user_code in SharedPreferences
-        await SharedPrefsHelper.saveEmail(email);
-        await SharedPrefsHelper.saveToken(token);
-        await SharedPrefsHelper.saveUserCode(userCode);
-
-        // Store email in SharedPreferences on successful login
-        await SharedPrefsHelper.saveEmail(email);
-        return response.data;  // Assuming response contains user info
+      return response.data;
+    }
+    on DioException catch (e) {
+      if (e.response != null) {
+        if (e.response!.statusCode == 401) {
+          return {'error': 'Incorrect password'};
+        }
+        else if (e.response!.statusCode == 404) {
+          return {'error': 'Email not found'};
+        }
+        else {
+          return {'error': 'Unexpected error: ${e.response!.statusCode}'};
+        }
       } else {
-        return {'error': 'Login failed: ${response.statusCode}'};
+        return {'error': 'Network error: ${e.message}'};
       }
     } catch (e) {
-      return {'error': 'Login failed: $e'};
+      return {'error': 'Login failed: ${e.toString()}'};
     }
   }
+
+  // Logout user method
+  Future<Map<String, dynamic>> logoutUser() async {
+    try {
+      // Making a POST request to the server to log out the user
+      Response response = await _dio.post('/logout');
+
+      if (response.statusCode == 200) {
+        // On successful logout, clear all user data from SharedPreferences
+        await SharedPrefsHelper.clearData();
+
+        return {'message': 'Logout successful'};
+      } else {
+        return {'error': 'Logout failed: ${response.statusCode}'};
+      }
+    } catch (e) {
+      return {'error': 'Logout failed: $e'};
+    }
+  }
+
 
   // Fetch user code method (new method)
   Future<String?> fetchUserCode(String email) async {

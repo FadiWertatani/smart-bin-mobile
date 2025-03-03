@@ -32,11 +32,9 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   void _login() async {
-    // Récupération des valeurs
     final email = _emailController.text.trim();
     final password = _passwordController.text;
 
-    // Vérification des champs vides
     if (email.isEmpty || password.isEmpty) {
       _showMessage("Email et mot de passe sont requis", true);
       return;
@@ -50,33 +48,32 @@ class _LoginScreenState extends State<LoginScreen> {
       var response = await ApiService().loginUser(email, password);
 
       if (response.containsKey('error')) {
-        // Gestion des différents types d'erreurs
         String errorMessage = response['error'];
-        if (errorMessage.contains('not found')) {
+
+        if (errorMessage == 'Email not found') {
           _showMessage("Adresse email invalide", true);
-        } else if (errorMessage.contains('password')) {
+        }
+        else if (errorMessage == 'Incorrect password') {
           _showMessage("Mot de passe incorrect", true);
-        } else {
+        }
+        else {
           _showMessage(errorMessage, true);
         }
-      } else if (response.containsKey('token')) {
-        // Récupération du user_code
-        String? userCode = await ApiService().fetchUserCode(email);
+      }
+      else if (response.containsKey('token')) {
+        // Retrieve user data from response
+        Map<String, dynamic> userData = response['user'];
+        String userCode = userData['user_code'];
 
-        if (userCode != null) {
-          // Sauvegarde du user_code si nécessaire
-          if (await SharedPrefsHelper.getUserCode() == null) {
-            await SharedPrefsHelper.saveUserCode(userCode);
-          }
+        // Store user_code in SharedPreferences if not already saved
+        if (await SharedPrefsHelper.getUserCode() == null) {
+          await SharedPrefsHelper.saveUserCode(userCode);
         }
 
-        // Message de succès et navigation
         _showMessage("Connexion réussie", false);
-        
-        // Attendre que le message soit affiché avant de naviguer
+
         await Future.delayed(const Duration(seconds: 1));
-        
-        // Navigation vers la page d'accueil
+
         if (mounted) {
           normalPush(context: context, direction: HomeLayout());
         }

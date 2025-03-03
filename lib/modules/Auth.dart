@@ -26,7 +26,7 @@ class AuthScreen extends StatelessWidget {
                     // GENBOX Logo
                     Image.asset(
                       'assets/images/logo.png',
-                      height: 250,
+                      height: 300,
                     ),
                     const SizedBox(height: 40),
 
@@ -43,7 +43,7 @@ class AuthScreen extends StatelessWidget {
 
                     // Subtitle text
                     const Text(
-                      "Login to enjoy the features we've provided, and stay healthy!",
+                      "Login to enjoy the features we've provided, and stay on track!",
                       style: TextStyle(
                         fontSize: 16,
                         color: Colors.grey,
