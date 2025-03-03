@@ -125,6 +125,24 @@ class ApiService {
     }
   }
 
+  Future<String?> getUserProfileImage(String userCode) async {
+    try {
+      // Request to fetch the profile image URL for the user
+      Response response = await _dio.get('/user/$userCode/profile-image');
+
+      if (response.statusCode == 200) {
+        // Assuming the API returns the profile image path
+        return response.data['profile_image']; // Return image path or URL
+      } else {
+        return null; // If the request fails or image not found
+      }
+    } catch (e) {
+      print('Error fetching user profile image: $e');
+      return null; // Return null in case of error
+    }
+  }
+
+
   Future<bool> uploadProfileImage(String userCode, File imageFile) async {
     try {
       String fileName = imageFile.path.split('/').last;

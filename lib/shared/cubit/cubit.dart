@@ -10,7 +10,7 @@ class AppCubit extends Cubit<AppStates> {
   static AppCubit get(context) => BlocProvider.of(context);
 
   // home Cubit
-  int homeCurrentIndex = 1;
+  int homeCurrentIndex = 0;
 
   List<Widget> homeBottomScreens = [
     HomeScreen(),

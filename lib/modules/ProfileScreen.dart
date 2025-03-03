@@ -32,14 +32,25 @@ class _ProfileScreenState extends State<ProfileScreen> {
     try {
       String? userCode = await SharedPrefsHelper.getUserCode();
       if (userCode != null) {
+        // Get user data
         var data = await ApiService().getUserData(userCode);
+
+        // Fetch user profile image
+        String? profileImageUrl = await ApiService().getUserProfileImage(userCode);
+
         if (!mounted) return;
+
         setState(() {
           userData = data;
           if (data['points'] != null) {
             todayPoints = _calculateTodayPoints(data['points']);
             totalPoints = data['points'].length;
             rewards = totalPoints ~/ 10;
+          }
+
+          // If the profile image URL exists, update it
+          if (profileImageUrl != null) {
+            userData['profile_image'] = profileImageUrl;
           }
         });
       }
@@ -51,6 +62,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       );
     }
   }
+
 
   int _calculateTodayPoints(List points) {
     final today = DateTime.now();
@@ -189,14 +201,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           children: [
                             CircleAvatar(
                               radius: 50,
-                              backgroundImage: _imageFile != null
-                                  ? FileImage(_imageFile!) as ImageProvider
-                                  : (userData['profile_image'] != null
-                                          ? NetworkImage(
-                                              '${ApiService.BASE_URL}/uploads/${userData['profile_image']}')
-                                          : AssetImage(
-                                              'assets/images/doctor.jpg'))
-                                      as ImageProvider,
+                              backgroundImage: userData['profile_image'] != null
+                                  ? NetworkImage(userData['profile_image'])
+                                  : AssetImage('assets/images/doctor.jpg') as ImageProvider,
+
                             ),
                             Positioned(
                               right: 0,
