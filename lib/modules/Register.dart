@@ -1,7 +1,10 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:smar_bin/modules/Login.dart';
+import 'package:smar_bin/modules/Privacy.dart';
+import 'package:smar_bin/modules/Terms.dart';
 import 'package:smar_bin/services/api_service.dart';
 import 'package:smar_bin/shared/components/navigator.dart';
 
@@ -45,20 +48,20 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
   bool _isValidPassword(String password) {
     if (password.length < 8) return false;
-    
+
     final hasUpperCase = RegExp(r'[A-Z]').hasMatch(password);
     final hasLowerCase = RegExp(r'[a-z]').hasMatch(password);
     final hasDigit = RegExp(r'[0-9]').hasMatch(password);
     final hasSpecialChar = RegExp(r'[!@#$%^&*(),.?":{}|<>]').hasMatch(password);
-    
+
     return hasUpperCase && hasLowerCase && hasDigit && hasSpecialChar;
   }
 
   String? _getPasswordErrorText(String password) {
     if (password.isEmpty) return null;
-    
+
     List<String> errors = [];
-    
+
     if (password.length < 8) {
       errors.add("• Le mot de passe doit contenir au moins 8 caractères");
     }
@@ -74,7 +77,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
     if (!RegExp(r'[!@#$%^&*(),.?":{}|<>]').hasMatch(password)) {
       errors.add("• Au moins un caractère spécial (!@#\$%^&*(),.?\":{}|<>)");
     }
-    
+
     return errors.isEmpty ? null : errors.join('\n');
   }
 
@@ -270,13 +273,20 @@ class _RegisterScreenState extends State<RegisterScreen> {
             text: TextSpan(
               style: TextStyle(fontSize: 14, color: Colors.grey.shade600),
               children: [
-                const TextSpan(text: 'I agree to the genbox '),
+                const TextSpan(text: 'I agree to the Technolypse '),
                 TextSpan(
                   text: 'Terms of Service',
                   style: const TextStyle(
                     color: Color(0xFF5EACC1),
                     fontWeight: FontWeight.w500,
                   ),
+                  recognizer: TapGestureRecognizer()
+                    ..onTap = () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => Terms()),
+                      );
+                    },
                 ),
                 const TextSpan(text: ' and '),
                 TextSpan(
@@ -285,6 +295,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     color: Color(0xFF5EACC1),
                     fontWeight: FontWeight.w500,
                   ),
+                  recognizer: TapGestureRecognizer()
+                    ..onTap = () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => Privacy()),
+                      );
+                    },
                 ),
               ],
             ),
@@ -355,7 +372,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
     final name = _nameController.text.trim();
     final email = _emailController.text.trim();
     final password = _passwordController.text;
-    
+
     // Liste pour stocker les messages d'erreur
     List<String> errors = [];
 

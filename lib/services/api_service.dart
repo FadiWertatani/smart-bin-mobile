@@ -125,10 +125,10 @@ class ApiService {
     }
   }
 
-  Future<String?> getUserProfileImage(String userCode) async {
+  Future<String?> getUserProfileImage(String email) async {
     try {
       // Request to fetch the profile image URL for the user
-      Response response = await _dio.get('/user/$userCode/profile-image');
+      Response response = await _dio.get('/user/$email/profile-image');
 
       if (response.statusCode == 200) {
         // Assuming the API returns the profile image path
@@ -156,6 +156,23 @@ class ApiService {
     } catch (e) {
       print('Error uploading image: $e');
       return false;
+    }
+  }
+
+  // Fetch staff list based on clinic
+  Future<List<Map<String, dynamic>>> fetchStaffsList(String clinic) async {
+    try {
+      Response response = await _dio.get('/staff', queryParameters: {'clinic': clinic});
+
+      if (response.statusCode == 200) {
+        // Returning the list of doctors
+        return List<Map<String, dynamic>>.from(response.data);
+      } else {
+        return [];
+      }
+    } catch (e) {
+      print('Error fetching staff list: $e');
+      return [];
     }
   }
 
