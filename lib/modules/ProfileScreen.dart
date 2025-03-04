@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:smar_bin/modules/Auth.dart';
+import 'package:smar_bin/modules/FAQ.dart';
 import 'dart:io';
 import 'package:smar_bin/services/api_service.dart';
 import 'package:smar_bin/services/SharedPrefsHelper.dart';
@@ -176,7 +177,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   void _showFAQs() {
-    // Implémentation des FAQs
+    normalPush(context: context, direction: FAQ());
   }
 
   @override
