@@ -12,7 +12,7 @@ class CacheHelper{
   }
 
   static dynamic getData(String key) {
-    return sharedPreferences.getString(key);
+    return sharedPreferences.getBool(key);
   }
 
 }

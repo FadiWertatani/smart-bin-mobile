@@ -32,9 +32,9 @@ class SharedPrefsHelper {
   }
 
   // Save user code to SharedPreferences
-  static Future<void> saveToken(String userCode) async {
+  static Future<void> saveToken(String token) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    await prefs.setString('token', userCode);
+    await prefs.setString('token', token);
   }
 
   // Retrieve user code from SharedPreferences
@@ -56,6 +56,18 @@ class SharedPrefsHelper {
     await prefs.remove('email');
     await prefs.remove('user_code');
     await prefs.remove('token');
+  }
+
+  // Save user code to SharedPreferences
+  static Future<void> saveOnBoarding(bool onBoarding) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setBool('on_boarding', onBoarding);
+  }
+
+  // Retrieve user code from SharedPreferences
+  static Future<String?> getOnBoarding() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    return prefs.getString('on_boarding');
   }
 
 }

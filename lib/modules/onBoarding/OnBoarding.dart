@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:smar_bin/modules/Auth.dart';
 import 'package:smar_bin/modules/HomeScreen.dart';
+import 'package:smar_bin/services/SharedPrefsHelper.dart';
 import 'package:smar_bin/shared/components/navigator.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
@@ -49,7 +50,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
               noBackPush(
                 context: context,
                 direction: AuthScreen(),
-              );
+              ).then((_)=>SharedPrefsHelper.saveOnBoarding(true));
             },
             child: const Text(
               'SKIP',
@@ -99,8 +100,8 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                     if (isLast == true) {
                       noBackPush(
                         context: context,
-                        direction: HomeScreen(),
-                      );
+                        direction: AuthScreen(),
+                      ).then((_)=>SharedPrefsHelper.saveOnBoarding(true));
                     } else {
                       _boardingController.nextPage(
                         duration: const Duration(milliseconds: 750),
