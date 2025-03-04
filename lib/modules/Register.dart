@@ -3,9 +3,7 @@ import 'package:iconsax/iconsax.dart';
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:smar_bin/modules/Login.dart';
 import 'package:smar_bin/services/api_service.dart';
-import 'package:smar_bin/shared/components/component.dart';
 import 'package:smar_bin/shared/components/navigator.dart';
-import 'package:dio/dio.dart'; // Import Dio package
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({Key? key}) : super(key: key);

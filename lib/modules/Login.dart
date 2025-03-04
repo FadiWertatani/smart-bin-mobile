@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:smar_bin/layout/HomeLayout.dart';
-import 'package:smar_bin/modules/HomeScreen.dart';
 import 'package:smar_bin/modules/Register.dart';
 import 'package:smar_bin/services/SharedPrefsHelper.dart';
 import 'package:smar_bin/services/api_service.dart';
+import 'package:smar_bin/shared/components/component.dart';
 import 'package:smar_bin/shared/components/navigator.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -20,23 +20,12 @@ class _LoginScreenState extends State<LoginScreen> {
   bool _obscurePassword = true;
   bool _isLoading = false;
 
-  // Fonction pour afficher un message
-  void _showMessage(String message, bool isError) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(message),
-        backgroundColor: isError ? Colors.red : Colors.green,
-        duration: const Duration(seconds: 3),
-      ),
-    );
-  }
-
   void _login() async {
     final email = _emailController.text.trim();
     final password = _passwordController.text;
 
     if (email.isEmpty || password.isEmpty) {
-      _showMessage("Email et mot de passe sont requis", true);
+      flutterToast(message: "Email and Password are necessary", backgroundColor: Colors.red);
       return;
     }
 
@@ -51,13 +40,13 @@ class _LoginScreenState extends State<LoginScreen> {
         String errorMessage = response['error'];
 
         if (errorMessage == 'Email not found') {
-          _showMessage("Adresse email invalide", true);
+          flutterToast(message: "Email Invalid!", backgroundColor: Colors.red);
         }
         else if (errorMessage == 'Incorrect password') {
-          _showMessage("Mot de passe incorrect", true);
+          flutterToast(message: "Password Incorrect!", backgroundColor: Colors.red);
         }
         else {
-          _showMessage(errorMessage, true);
+          flutterToast(message: errorMessage, backgroundColor: Colors.red);
         }
       }
       else if (response.containsKey('token')) {
@@ -70,8 +59,6 @@ class _LoginScreenState extends State<LoginScreen> {
           await SharedPrefsHelper.saveUserCode(userCode);
         }
 
-        _showMessage("Connexion réussie", false);
-
         await Future.delayed(const Duration(seconds: 1));
 
         if (mounted) {
@@ -79,7 +66,7 @@ class _LoginScreenState extends State<LoginScreen> {
         }
       }
     } catch (e) {
-      _showMessage("Erreur de connexion: $e", true);
+      flutterToast(message: "Connexion error", backgroundColor: Colors.orangeAccent);
       print(e);
     }
 

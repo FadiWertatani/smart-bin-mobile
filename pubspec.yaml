@@ -37,6 +37,7 @@ dependencies:
   cupertino_icons: ^1.0.8
   smooth_page_indicator: ^1.2.0+3
   fl_chart: ^0.70.2
+  fluttertoast: ^8.2.12
 
   #icons_launcher
   icons_launcher: ^3.0.0
