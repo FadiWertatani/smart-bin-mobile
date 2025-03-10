@@ -4,7 +4,7 @@ import 'package:uuid/uuid.dart';
 import 'dart:io';
 
 class ApiService {
-  static const String BASE_URL = 'http://192.168.16.1:5000';
+  static const String BASE_URL = 'http://192.168.1.12:5000';
 
   // Private constructor
   ApiService._internal();
@@ -19,7 +19,7 @@ class ApiService {
 
   // Dio instance
   final Dio _dio = Dio(BaseOptions(
-    baseUrl: 'http://192.168.1.19:5000', // Replace with your actual IP
+    baseUrl: BASE_URL,
     connectTimeout: Duration(seconds: 10),
     receiveTimeout: Duration(seconds: 10),
   ));
@@ -30,11 +30,11 @@ class ApiService {
       String userCode = _uuid.v4();
 
       Response response = await _dio.post('/register', data: {
-        'name': name,
+        'full_name': name,
         'email': email,
         'password': password,
-        'clinic': clinic,
         'user_code': userCode,
+        'clinic': clinic,
       });
 
       if (response.statusCode == 200 || response.statusCode == 201) {
@@ -50,6 +50,7 @@ class ApiService {
     }
   }
 
+  //login
   Future<Map<String, dynamic>> loginUser(String email, String password) async {
     try {
       Response response = await _dio.post('/login', data: {

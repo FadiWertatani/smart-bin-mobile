@@ -39,8 +39,9 @@ dependencies:
   fl_chart: ^0.70.2
   fluttertoast: ^8.2.12
 
-  #icons_launcher
+  #launchers
   icons_launcher: ^3.0.0
+  flutter_native_splash: ^2.4.4
 
   #icons
   iconsax: ^0.0.8
@@ -68,6 +69,7 @@ dependencies:
 
 
 
+
 icons_launcher:
   image_path: "assets/images/logo.png"
   platforms:
@@ -75,6 +77,14 @@ icons_launcher:
       enable: true
     ios:
       enable: true
+
+flutter_native_splash:
+  color: "#FFFFFF"  # Background color
+  image: "assets/images/technolypse.png"  # Path to splash image
+  android: true
+  ios: true
+  web: true
+
 
 dev_dependencies:
   flutter_test:

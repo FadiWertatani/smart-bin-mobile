@@ -25,7 +25,7 @@ class AuthScreen extends StatelessWidget {
                   children: [
                     // GENBOX Logo
                     Image.asset(
-                      'assets/images/logo.png',
+                      'assets/images/technolypse.png',
                       height: 300,
                     ),
                     const SizedBox(height: 40),

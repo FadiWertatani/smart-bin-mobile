@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:smar_bin/modules/Auth.dart';
 import 'package:smar_bin/modules/FAQ.dart';
+import 'package:smar_bin/modules/Statistics.dart';
 import 'dart:io';
 import 'package:smar_bin/services/api_service.dart';
 import 'package:smar_bin/services/SharedPrefsHelper.dart';
@@ -137,39 +138,40 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   void _showPointsHistory() {
-    showModalBottomSheet(
-      context: context,
-      isScrollControlled: true,
-      builder: (context) => Container(
-        height: MediaQuery.of(context).size.height * 0.7,
-        padding: EdgeInsets.all(20),
-        child: Column(
-          children: [
-            Text(
-              'Historique des points',
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-            ),
-            SizedBox(height: 20),
-            Expanded(
-              child: ListView.builder(
-                itemCount: userData['points']?.length ?? 0,
-                itemBuilder: (context, index) {
-                  final point = userData['points'][index];
-                  final date = DateTime.parse(point['date']);
-                  return ListTile(
-                    title: Text('Point gagné'),
-                    subtitle: Text(
-                      DateFormat('dd/MM/yyyy HH:mm:ss').format(date),
-                    ),
-                    leading: Icon(Icons.star, color: Colors.amber),
-                  );
-                },
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
+    normalPush(context: context, direction: Statistics());
+    // showModalBottomSheet(
+    //   context: context,
+    //   isScrollControlled: true,
+    //   builder: (context) => Container(
+    //     height: MediaQuery.of(context).size.height * 0.7,
+    //     padding: EdgeInsets.all(20),
+    //     child: Column(
+    //       children: [
+    //         Text(
+    //           'Historique des points',
+    //           style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+    //         ),
+    //         SizedBox(height: 20),
+    //         Expanded(
+    //           child: ListView.builder(
+    //             itemCount: userData['points']?.length ?? 0,
+    //             itemBuilder: (context, index) {
+    //               final point = userData['points'][index];
+    //               final date = DateTime.parse(point['date']);
+    //               return ListTile(
+    //                 title: Text('Point gagné'),
+    //                 subtitle: Text(
+    //                   DateFormat('dd/MM/yyyy HH:mm:ss').format(date),
+    //                 ),
+    //                 leading: Icon(Icons.star, color: Colors.amber),
+    //               );
+    //             },
+    //           ),
+    //         ),
+    //       ],
+    //     ),
+    //   ),
+    // );
   }
 
   void _showHistory() {
@@ -228,7 +230,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       ),
                       SizedBox(height: 15),
                       Text(
-                        userData['name'] ?? 'Chargement...',
+                        userData['name'] ?? 'Loading...',
                         style: TextStyle(
                           fontSize: 24,
                           fontWeight: FontWeight.bold,
@@ -239,9 +241,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
-                          _buildStatItem("Aujourd'hui", todayPoints),
+                          _buildStatItem("Today", todayPoints),
                           _buildStatItem('Total', totalPoints),
-                          _buildStatItem('Récompenses', rewards),
+                          _buildStatItem('Recompenses', rewards),
                         ],
                       ),
                     ],
