@@ -17,21 +17,13 @@ class RegisterScreen extends StatefulWidget {
 
 class _RegisterScreenState extends State<RegisterScreen> {
   bool _obscurePassword = true;
+  bool _obscureConfirmPassword = true;
   bool _agreeToTerms = false;
-  String? selectedClinic;
 
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-
-  final List<String> clinics = [
-    "City Hospital",
-    "Green Valley Clinic",
-    "Sunrise Care",
-    "Health Plus",
-    "Wellness Center",
-    "Metro Healthcare"
-  ];
+  final TextEditingController _confirmPasswordController = TextEditingController();
 
   final ApiService _apiService = ApiService(); // Use the singleton instance
 
@@ -99,75 +91,39 @@ class _RegisterScreenState extends State<RegisterScreen> {
         centerTitle: true,
       ),
       body: SafeArea(
-        child: Center(
-          child: SingleChildScrollView(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 24.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  // Name field
-                  _buildInputField(Iconsax.personalcard, 'Enter your name', _nameController),
-                  const SizedBox(height: 16),
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 20.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                // Name field
+                _buildInputField(Iconsax.personalcard, 'Enter your name', _nameController),
+                const SizedBox(height: 16),
 
-                  // Email field
-                  _buildInputField(Iconsax.direct, 'Enter your email', _emailController),
-                  const SizedBox(height: 16),
+                // Email field
+                _buildInputField(Iconsax.direct, 'Enter your email', _emailController),
+                const SizedBox(height: 16),
 
-                  // Clinic Dropdown (Searchable)
-                  Container(
-                    decoration: BoxDecoration(
-                      color: Colors.grey.shade100,
-                      borderRadius: BorderRadius.circular(30),
-                    ),
-                    padding: const EdgeInsets.symmetric(vertical: 4),
-                    child: DropdownSearch<String>(
-                      popupProps: PopupProps.menu(
-                        showSearchBox: true,
-                        searchFieldProps: TextFieldProps(
-                          decoration: InputDecoration(
-                            hintText: "Search clinic...",
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(12),
-                            ),
-                          ),
-                        ),
-                      ),
-                      items: clinics,
-                      dropdownDecoratorProps: DropDownDecoratorProps(
-                        dropdownSearchDecoration: InputDecoration(
-                          border: InputBorder.none,
-                          prefixIcon: Icon(Iconsax.hospital, color: Colors.grey.shade500),
-                          hintText: "Select your Clinic",
-                          hintStyle: TextStyle(color: Colors.grey.shade500),
-                        ),
-                      ),
-                      onChanged: (String? newValue) {
-                        setState(() {
-                          selectedClinic = newValue;
-                        });
-                      },
-                      selectedItem: selectedClinic,
-                    ),
-                  ),
-                  const SizedBox(height: 16),
+                // Password field
+                _buildPasswordField(),
+                const SizedBox(height: 16),
 
-                  // Password field
-                  _buildPasswordField(),
-                  const SizedBox(height: 16),
+                // Password field
+                _buildConfirmPasswordField(),
+                const SizedBox(height: 16),
 
-                  // Terms and Conditions
-                  _buildTermsAndConditions(),
-                  const SizedBox(height: 24),
+                // Terms and Conditions
+                _buildTermsAndConditions(),
+                const SizedBox(height: 24),
 
-                  // Sign Up button
-                  _buildSignUpButton(),
-                  const SizedBox(height: 24),
+                // Sign Up button
+                _buildSignUpButton(),
+                const SizedBox(height: 24),
 
-                  // Already have an account
-                  _buildSignInText(),
-                ],
-              ),
+                // Already have an account
+                _buildSignInText(),
+              ],
             ),
           ),
         ),
@@ -246,6 +202,57 @@ class _RegisterScreenState extends State<RegisterScreen> {
     );
   }
 
+  // Password Field
+  Widget _buildConfirmPasswordField() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Container(
+          decoration: BoxDecoration(
+            color: Colors.grey.shade100,
+            borderRadius: BorderRadius.circular(30),
+          ),
+          child: TextField(
+            controller: _confirmPasswordController,
+            obscureText: _obscureConfirmPassword,
+            onChanged: (value) {
+              setState(() {}); // Refresh to show/hide error text
+            },
+            decoration: InputDecoration(
+              hintText: 'Confirm your password',
+              hintStyle: TextStyle(color: Colors.grey.shade500),
+              prefixIcon: Icon(Iconsax.lock, color: Colors.grey.shade500),
+              suffixIcon: GestureDetector(
+                onTap: () {
+                  setState(() {
+                    _obscureConfirmPassword = !_obscureConfirmPassword;
+                  });
+                },
+                child: Icon(
+                  _obscureConfirmPassword ? Icons.visibility_off_outlined : Icons.visibility_outlined,
+                  color: Colors.grey.shade500,
+                ),
+              ),
+              border: InputBorder.none,
+              contentPadding: const EdgeInsets.symmetric(vertical: 16),
+            ),
+          ),
+        ),
+        if (_passwordController.text.isNotEmpty)
+          Padding(
+            padding: const EdgeInsets.only(top: 8.0, left: 16.0),
+            child: Text(
+              _getPasswordErrorText(_passwordController.text) ?? "Mot de passe valide ✓",
+              style: TextStyle(
+                color: _isValidPassword(_passwordController.text) ? Colors.green : Colors.red,
+                fontSize: 12,
+              ),
+            ),
+          ),
+      ],
+    );
+  }
+
   // Terms and Conditions
   Widget _buildTermsAndConditions() {
     return Row(
@@ -264,7 +271,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
               borderRadius: BorderRadius.circular(4),
             ),
             side: BorderSide(color: Colors.grey.shade400),
-            activeColor: const Color(0xFF5EACC1),
+            activeColor: Theme.of(context).primaryColor,
           ),
         ),
         const SizedBox(width: 8),
@@ -276,8 +283,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 const TextSpan(text: 'I agree to the Technolypse '),
                 TextSpan(
                   text: 'Terms of Service',
-                  style: const TextStyle(
-                    color: Color(0xFF5EACC1),
+                  style: TextStyle(
+                    color: Theme.of(context).primaryColor,
                     fontWeight: FontWeight.w500,
                   ),
                   recognizer: TapGestureRecognizer()
@@ -291,8 +298,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 const TextSpan(text: ' and '),
                 TextSpan(
                   text: 'Privacy Policy',
-                  style: const TextStyle(
-                    color: Color(0xFF5EACC1),
+                  style: TextStyle(
+                    color: Theme.of(context).primaryColor,
                     fontWeight: FontWeight.w500,
                   ),
                   recognizer: TapGestureRecognizer()
@@ -319,7 +326,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
       child: ElevatedButton(
         onPressed: _agreeToTerms ? _registerUser : null,
         style: ElevatedButton.styleFrom(
-          backgroundColor: const Color(0xFF5EACC1),
+          backgroundColor: Theme.of(context).primaryColor,
           foregroundColor: Colors.white,
           disabledBackgroundColor: Colors.grey.shade300,
           shape: RoundedRectangleBorder(
@@ -354,10 +361,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
           onTap: () {
             normalPush(context: context, direction: LoginScreen());
           },
-          child: const Text(
+          child: Text(
             "Sign In",
             style: TextStyle(
-              color: Color(0xFF5EACC1),
+              color: Theme.of(context).primaryColor,
               fontWeight: FontWeight.w600,
               fontSize: 14,
             ),
@@ -372,6 +379,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
     final name = _nameController.text.trim();
     final email = _emailController.text.trim();
     final password = _passwordController.text;
+    final confirmPassword = _passwordController.text;
 
     // Liste pour stocker les messages d'erreur
     List<String> errors = [];
@@ -397,11 +405,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
       errors.add("Le mot de passe ne respecte pas les critères de sécurité");
     }
 
-    // Validation de la clinique
-    if (selectedClinic == null) {
-      errors.add("Veuillez sélectionner une clinique");
-    }
-
     // Vérification des termes et conditions
     if (!_agreeToTerms) {
       errors.add("Veuillez accepter les termes et conditions");
@@ -418,7 +421,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
       name,
       email,
       password,
-      selectedClinic!,
+      confirmPassword,
     );
 
     if (responseMessage.contains('success')) {

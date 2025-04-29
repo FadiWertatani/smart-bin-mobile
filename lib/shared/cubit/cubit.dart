@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:smar_bin/modules/HomeScreen.dart';
-import 'package:smar_bin/modules/ProfileScreen.dart';
 import 'package:smar_bin/shared/cubit/states.dart';
+
+import '../../modules/Profile.dart';
 
 class AppCubit extends Cubit<AppStates> {
   AppCubit() : super(AppInitialStates());
@@ -14,7 +15,7 @@ class AppCubit extends Cubit<AppStates> {
 
   List<Widget> homeBottomScreens = [
     HomeScreen(),
-    ProfileScreen(),
+    Profile(),
   ];
 
   void homeChangeBottom(int index) {

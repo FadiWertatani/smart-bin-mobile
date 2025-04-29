@@ -8,11 +8,10 @@ class Statistics extends StatelessWidget {
       backgroundColor: Color(0xFF1A2A41), // Dark background color
       appBar: AppBar(
         title: Text("Weekly Stats"),
-        backgroundColor: Color(0xFF1A2A41),
       ),
       body: Center(
         child: Padding(
-          padding: EdgeInsets.all(16.0),
+          padding: EdgeInsets.all(24.0),
           child: BarChart(
             BarChartData(
               barGroups: _getBarGroups(),

@@ -6,7 +6,8 @@ import 'package:smar_bin/shared/components/navigator.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 class OnboardingScreen extends StatefulWidget {
-  const OnboardingScreen({Key? key}) : super(key: key);
+
+  const OnboardingScreen({super.key});
 
   @override
   State<OnboardingScreen> createState() => _OnboardingScreenState();
@@ -22,7 +23,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
           'eco-friendly.',
     ),
     OnBoardingModel(
-      image: 'assets/images/questioning.png',
+      image: 'assets/images/questionning.png',
       title: 'How It Works',
       body: 'Simply dispose of your waste — our AI-powered system classifies, '
           'tracks, and manages it, ensuring hygiene and environmental compliance.',
@@ -88,8 +89,8 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
               children: [
                 SmoothPageIndicator(
                   controller: _boardingController,
-                  effect: const WormEffect(
-                    activeDotColor: Color(0xff589FB6),
+                  effect: WormEffect(
+                    activeDotColor: Theme.of(context).primaryColor,
                   ),
                   count: boarding.length,
                 ),

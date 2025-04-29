@@ -51,13 +51,13 @@ class _LoginScreenState extends State<LoginScreen> {
       }
       else if (response.containsKey('token')) {
         // Retrieve user data from response
-        Map<String, dynamic> userData = response['user'];
-        String userCode = userData['user_code'];
+        // Map<String, dynamic> userData = response['user'];
+        // String userCode = userData['user_code'];
 
         // Store user_code in SharedPreferences if not already saved
-        if (await SharedPrefsHelper.getUserCode() == null) {
-          await SharedPrefsHelper.saveUserCode(userCode);
-        }
+        // if (await SharedPrefsHelper.getUserCode() == null) {
+        //   await SharedPrefsHelper.saveUserCode(userCode);
+        // }
 
         await Future.delayed(const Duration(seconds: 1));
 
@@ -158,7 +158,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       // Add Forgot Password functionality
                     },
                     style: TextButton.styleFrom(
-                      foregroundColor: const Color(0xFF5EACC1),
+                      foregroundColor: Theme.of(context).primaryColor,
                       padding: const EdgeInsets.symmetric(vertical: 8),
                       minimumSize: Size.zero,
                       tapTargetSize: MaterialTapTargetSize.shrinkWrap,
@@ -181,7 +181,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   child: ElevatedButton(
                     onPressed: _isLoading ? null : _login,
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xFF5EACC1),
+                      backgroundColor: Theme.of(context).primaryColor,
                       foregroundColor: Colors.white,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(28),
@@ -216,10 +216,10 @@ class _LoginScreenState extends State<LoginScreen> {
                       onTap: () {
                         normalPush(context: context, direction: RegisterScreen());
                       },
-                      child: const Text(
+                      child: Text(
                         "Sign Up",
                         style: TextStyle(
-                          color: Color(0xFF5EACC1),
+                          color: Theme.of(context).primaryColor,
                           fontWeight: FontWeight.w600,
                           fontSize: 14,
                         ),

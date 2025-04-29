@@ -4,7 +4,7 @@ import 'package:uuid/uuid.dart';
 import 'dart:io';
 
 class ApiService {
-  static const String BASE_URL = 'http://192.168.1.12:5000';
+  static const String BASE_URL = 'https://smartbin-backend.onrender.com';
 
   // Private constructor
   ApiService._internal();
@@ -24,26 +24,34 @@ class ApiService {
     receiveTimeout: Duration(seconds: 10),
   ));
 
-  Future<String> registerUser(String name, String email, String password, String clinic) async {
+  Future<String> registerUser(String name, String email, String password,
+      String confirmPassword) async {
     try {
-      // Generate unique random code
-      String userCode = _uuid.v4();
-
-      Response response = await _dio.post('/register', data: {
+      Response response = await _dio.post('/signup', data: {
         'full_name': name,
         'email': email,
         'password': password,
-        'user_code': userCode,
-        'clinic': clinic,
+        'confirm_password': confirmPassword,
       });
 
       if (response.statusCode == 200 || response.statusCode == 201) {
-        // Store email in SharedPreferences on successful registration
+        final data = response.data;
+
+        // Save email and user_code
         await SharedPrefsHelper.saveEmail(email);
-        await SharedPrefsHelper.saveUserCode(userCode);
-        return response.data['message'];  // Assuming API returns message
+        if (data['user_code'] != null) {
+          await SharedPrefsHelper.saveUserCode(data['user_code']);
+        }
+
+        return data['message'] ?? 'Registration successful';
       } else {
         return 'Registration failed: ${response.statusCode}';
+      }
+    } on DioException catch (e) {
+      if (e.response != null && e.response!.data != null) {
+        return e.response!.data['message'] ?? 'Unknown error occurred';
+      } else {
+        return 'Network error: ${e.message}';
       }
     } catch (e) {
       return 'Registration failed: $e';
@@ -53,33 +61,33 @@ class ApiService {
   //login
   Future<Map<String, dynamic>> loginUser(String email, String password) async {
     try {
-      Response response = await _dio.post('/login', data: {
+      Response response = await _dio.post('/api/login', data: {
         'email': email,
         'password': password,
       });
 
-      // If request succeeds, process the response
-      Map<String, dynamic> userData = response.data['user'];
-      String token = response.data['token'];
-      String userCode = userData['user_code'];
+      final data = response.data;
 
-      // Save data in SharedPreferences
-      await SharedPrefsHelper.saveEmail(email);
-      await SharedPrefsHelper.saveToken(token);
-      await SharedPrefsHelper.saveUserCode(userCode);
+      // Check for required fields
+      if (data == null || data['token'] == null || data['user_code'] == null) {
+        return {'error': 'Invalid response from server'};
+      }
 
-      return response.data;
-    }
-    on DioException catch (e) {
+      // Save required fields
+      await SharedPrefsHelper.saveEmail(data['email']);
+      await SharedPrefsHelper.saveToken(data['token']);
+      await SharedPrefsHelper.saveUserCode(data['user_code']);
+
+      return data;
+    } on DioException catch (e) {
       if (e.response != null) {
+        final message = e.response!.data['message'] ?? 'Unexpected error';
         if (e.response!.statusCode == 401) {
-          return {'error': 'Incorrect password'};
-        }
-        else if (e.response!.statusCode == 404) {
-          return {'error': 'Email not found'};
-        }
-        else {
-          return {'error': 'Unexpected error: ${e.response!.statusCode}'};
+          return {'error': 'Invalid email or password'};
+        } else if (e.response!.statusCode == 403) {
+          return {'error': message};
+        } else {
+          return {'error': 'Server error: ${e.response!.statusCode}'};
         }
       } else {
         return {'error': 'Network error: ${e.message}'};
@@ -107,7 +115,6 @@ class ApiService {
       return {'error': 'Logout failed: $e'};
     }
   }
-
 
   // Fetch user code method (new method)
   Future<String?> fetchUserCode(String email) async {
@@ -143,16 +150,17 @@ class ApiService {
     }
   }
 
-
   Future<bool> uploadProfileImage(String userCode, File imageFile) async {
     try {
       String fileName = imageFile.path.split('/').last;
       FormData formData = FormData.fromMap({
-        'image': await MultipartFile.fromFile(imageFile.path, filename: fileName),
+        'image':
+            await MultipartFile.fromFile(imageFile.path, filename: fileName),
         'user_code': userCode,
       });
 
-      Response response = await _dio.post('/upload-profile-image', data: formData);
+      Response response =
+          await _dio.post('/upload-profile-image', data: formData);
       return response.statusCode == 200;
     } catch (e) {
       print('Error uploading image: $e');
@@ -163,7 +171,8 @@ class ApiService {
   // Fetch staff list based on clinic
   Future<List<Map<String, dynamic>>> fetchStaffsList(String clinic) async {
     try {
-      Response response = await _dio.get('/staff', queryParameters: {'clinic': clinic});
+      Response response =
+          await _dio.get('/staff', queryParameters: {'clinic': clinic});
 
       if (response.statusCode == 200) {
         // Returning the list of doctors

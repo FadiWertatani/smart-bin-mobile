@@ -27,7 +27,7 @@ class HomeLayout extends StatelessWidget {
               },
               iconSize: 30,
               activeColor: Theme.of(context).primaryColor,
-              inactiveColor: const Color(0xff589FB6),
+              inactiveColor: Theme.of(context).primaryColor,
               selectedIndex: cubit.homeCurrentIndex,
               barItems: [
                 BarItem(

@@ -198,6 +198,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   padding: const EdgeInsets.all(20.0),
                   child: Column(
                     children: [
+                      SizedBox(height: 20.0),
                       GestureDetector(
                         onTap: _showImagePickerOptions,
                         child: Stack(
@@ -249,7 +250,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     ],
                   ),
                 ),
-                SizedBox(height: 20),
+                SizedBox(height: 360),
                 // Section du bas (menu)
                 Container(
                   decoration: BoxDecoration(

@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:smar_bin/modules/Login.dart';
-import 'package:smar_bin/modules/Register.dart';
 import 'package:smar_bin/shared/components/navigator.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class AuthScreen extends StatelessWidget {
   const AuthScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final t = AppLocalizations.of(context)!;
+
     return Scaffold(
       backgroundColor: Colors.white,
       body: SafeArea(
@@ -15,25 +17,21 @@ class AuthScreen extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 24.0),
           child: Column(
             children: [
-              // Status bar area
               const SizedBox(height: 40),
 
-              // Logo section
               Expanded(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    // GENBOX Logo
                     Image.asset(
                       'assets/images/technolypse.png',
                       height: 300,
                     ),
                     const SizedBox(height: 40),
 
-                    // Let's get started text
-                    const Text(
-                      "Let's get started!",
-                      style: TextStyle(
+                    Text(
+                      t.letsGetStarted,
+                      style: const TextStyle(
                         fontSize: 24,
                         fontWeight: FontWeight.bold,
                         color: Colors.black87,
@@ -41,10 +39,9 @@ class AuthScreen extends StatelessWidget {
                     ),
                     const SizedBox(height: 12),
 
-                    // Subtitle text
-                    const Text(
-                      "Login to enjoy the features we've provided, and stay on track!",
-                      style: TextStyle(
+                    Text(
+                      t.loginSubtitle,
+                      style: const TextStyle(
                         fontSize: 16,
                         color: Colors.grey,
                         height: 1.5,
@@ -53,25 +50,27 @@ class AuthScreen extends StatelessWidget {
                     ),
                     const SizedBox(height: 60),
 
-                    // Login button
                     SizedBox(
                       width: double.infinity,
                       height: 56,
                       child: ElevatedButton(
                         onPressed: () {
-                          normalPush(context: context, direction: LoginScreen());
+                          normalPush(
+                            context: context,
+                            direction: LoginScreen(),
+                          );
                         },
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: const Color(0xFF5EACC1),
+                          backgroundColor: Theme.of(context).primaryColor,
                           foregroundColor: Colors.white,
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(28),
                           ),
                           elevation: 0,
                         ),
-                        child: const Text(
-                          'Login',
-                          style: TextStyle(
+                        child: Text(
+                          t.staff,
+                          style: const TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.w500,
                           ),
@@ -80,27 +79,29 @@ class AuthScreen extends StatelessWidget {
                     ),
                     const SizedBox(height: 16),
 
-                    // Sign Up button
                     SizedBox(
                       width: double.infinity,
                       height: 56,
                       child: OutlinedButton(
                         onPressed: () {
-                          normalPush(context: context, direction: RegisterScreen());
+                          normalPush(
+                            context: context,
+                            direction: LoginScreen(),
+                          );
                         },
                         style: OutlinedButton.styleFrom(
-                          foregroundColor: const Color(0xFF5EACC1),
+                          foregroundColor: Theme.of(context).primaryColor,
                           side: const BorderSide(
-                            color: Color(0xFF5EACC1),
+                            color: Color(0xff015ff3),
                             width: 1.5,
                           ),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(28),
                           ),
                         ),
-                        child: const Text(
-                          'Sign Up',
-                          style: TextStyle(
+                        child: Text(
+                          t.collector,
+                          style: const TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.w500,
                           ),
@@ -111,7 +112,6 @@ class AuthScreen extends StatelessWidget {
                 ),
               ),
 
-              // Bottom area
               const SizedBox(height: 40),
             ],
           ),

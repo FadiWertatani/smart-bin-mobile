@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:smar_bin/services/SharedPrefsHelper.dart';
-import 'package:smar_bin/services/api_service.dart';
-import 'package:uuid/uuid.dart';
 
 class QrCodeScreen extends StatefulWidget {
   QrCodeScreen({Key? key}) : super(key: key);
@@ -83,7 +81,7 @@ class _QrCodeScreenState extends State<QrCodeScreen> {
                 child: ElevatedButton(
                   onPressed: () => Navigator.of(context).pop(),
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFF5EACC1),
+                    backgroundColor: Theme.of(context).primaryColor,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(25),
                     ),
