@@ -1,8 +1,22 @@
 {
   "hello": "Hello",
   "language": "Language",
+  "welcome": "Welcome to Smart Waste Management!",
   "letsGetStarted": "Let's get started!",
   "loginSubtitle": "Login to enjoy the features we've provided, and stay on track!",
   "staff": "Staff",
-  "collector": "Collector"
+  "collector": "Collector",
+  "earnRewards": "Earn Rewards for Going Green!",
+  "disposeSmart": "Dispose smart.",
+  "getRewarded": "Get rewarded.",
+  "getQrCode": "Get QR Code",
+  "searchHint": "Search doctor, articles...",
+  "topStaff": "Top Staff",
+  "seeAll": "See all",
+  "drAziz": "Dr. Med Aziz Beja",
+  "surgeon": "Surgeon",
+  "amira": "Amira Isabldi",
+  "nurse": "Nurse",
+  "samar": "Samar Rezgui",
+  "orthopedics": "Orthopedics"
 }

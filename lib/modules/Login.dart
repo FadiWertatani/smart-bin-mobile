@@ -8,7 +8,9 @@ import 'package:smar_bin/shared/components/component.dart';
 import 'package:smar_bin/shared/components/navigator.dart';
 
 class LoginScreen extends StatefulWidget {
+
   const LoginScreen({Key? key}) : super(key: key);
+
 
   @override
   State<LoginScreen> createState() => _LoginScreenState();

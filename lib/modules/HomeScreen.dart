@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:smar_bin/modules/QrScreen.dart';
+import 'package:smar_bin/modules/Stats.dart';
+import 'package:smar_bin/shared/components/StatGauge.dart';
 import 'package:smar_bin/shared/components/navigator.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -8,193 +10,219 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          // App header with title and icons
-          Padding(
-            padding: const EdgeInsets.fromLTRB(20, 16, 20, 16),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                const Text(
-                  'Earn Rewards for\nGoing Green!',
-                  style: TextStyle(
-                    fontSize: 22,
-                    fontWeight: FontWeight.bold,
+      child: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // App header with title and icons
+            Padding(
+              padding: const EdgeInsets.fromLTRB(20, 16, 20, 16),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  const Text(
+                    'Earn Rewards for\nGoing Green!',
+                    style: TextStyle(
+                      fontSize: 22,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
-                ),
-                Row(
-                  children: [
-                    Container(
-                      padding: const EdgeInsets.all(8),
-                      decoration: BoxDecoration(
-                        border: Border.all(color: Colors.grey.shade300),
-                        borderRadius: BorderRadius.circular(10),
+                  Row(
+                    children: [
+                      Container(
+                        padding: const EdgeInsets.all(8),
+                        decoration: BoxDecoration(
+                          border: Border.all(color: Colors.grey.shade300),
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: GestureDetector(
+                          child: const Icon(Icons.qr_code_scanner_rounded, size: 22),
+                          onTap: () => normalPush(context: context, direction: QrCodeScreen()),
+                        ),
                       ),
-                      child: GestureDetector(
-                        child: const Icon(Icons.qr_code_scanner_rounded, size: 22),
-                        onTap: () => normalPush(context: context, direction: QrCodeScreen()),
+                      const SizedBox(width: 10),
+                      const Icon(Icons.notifications_outlined, size: 24),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+
+            // Search bar
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: Container(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                decoration: BoxDecoration(
+                  color: Colors.grey.shade100,
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: const Row(
+                  children: [
+                    Icon(Icons.search, color: Colors.grey),
+                    SizedBox(width: 8),
+                    Expanded(
+                      child: TextField(
+                        decoration: InputDecoration(
+                          hintText: 'Search doctor, articles...',
+                          hintStyle: TextStyle(color: Colors.grey),
+                          border: InputBorder.none,
+                        ),
                       ),
                     ),
-                    const SizedBox(width: 10),
-                    const Icon(Icons.notifications_outlined, size: 24),
                   ],
                 ),
-              ],
-            ),
-          ),
-
-          // Search bar
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20),
-            child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              decoration: BoxDecoration(
-                color: Colors.grey.shade100,
-                borderRadius: BorderRadius.circular(8),
-              ),
-              child: const Row(
-                children: [
-                  Icon(Icons.search, color: Colors.grey),
-                  SizedBox(width: 8),
-                  Expanded(
-                    child: TextField(
-                      decoration: InputDecoration(
-                        hintText: 'Search doctor, articles...',
-                        hintStyle: TextStyle(color: Colors.grey),
-                        border: InputBorder.none,
-                      ),
-                    ),
-                  ),
-                ],
               ),
             ),
-          ),
 
-          const SizedBox(height: 24),
+            const SizedBox(height: 24),
 
-          // Rewards banner
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20),
-            child: Container(
-              padding: const EdgeInsets.all(16),
-              decoration: BoxDecoration(
-                color: Colors.teal.shade50,
-                borderRadius: BorderRadius.circular(12),
-              ),
-              child: Row(
-                children: [
-                  // Left text section
-                  const Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'Dispose smart.',
-                          style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        Text(
-                          'Get rewarded.',
-                          style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
-                        SizedBox(height: 12),
-                        ElevatedButton(
-                          onPressed: null,
-                          style: ButtonStyle(
-                            backgroundColor: MaterialStatePropertyAll(Colors.teal),
-                            padding: MaterialStatePropertyAll(
-                              EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+            // Rewards banner
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: Container(
+                padding: const EdgeInsets.all(16),
+                decoration: BoxDecoration(
+                  color: Color(0xffD6E4FF),
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: Row(
+                  children: [
+                    // Left text section
+                    const Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Dispose smart.',
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
                             ),
                           ),
-                          child: Text(
-                            'Get QR Code',
-                            style: TextStyle(color: Colors.white),
+                          Text(
+                            'Get rewarded.',
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.w500,
+                            ),
                           ),
-                        ),
-                      ],
-                    ),
-                  ),
-
-                  // Doctor image
-                  Container(
-                    height: 100,
-                    width: 100,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(8),
-                      image: const DecorationImage(
-                        image: AssetImage('assets/images/doctor.jpg'),
-                        fit: BoxFit.cover,
+                          SizedBox(height: 12),
+                          ElevatedButton(
+                            onPressed: null,
+                            style: ButtonStyle(
+                              backgroundColor: MaterialStatePropertyAll(Color(0xff015ff3)),
+                              padding: MaterialStatePropertyAll(
+                                EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                              ),
+                            ),
+                            child: Text(
+                              'Get QR Code',
+                              style: TextStyle(color: Colors.white),
+                            ),
+                          ),
+                        ],
                       ),
                     ),
+
+                    // Doctor image
+                    Container(
+                      height: 100,
+                      width: 100,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(8),
+                        image: const DecorationImage(
+                          image: AssetImage('assets/images/doctor.jpg'),
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+
+            const SizedBox(height: 24),
+
+            // Top Staff section
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  const Text(
+                    'Top Staff',
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  TextButton(
+                    onPressed: () {},
+                    child: const Text('See all', style: TextStyle(color: Colors.blue)),
                   ),
                 ],
               ),
             ),
-          ),
 
-          const SizedBox(height: 24),
+            const SizedBox(height: 8),
 
-          // Top Staff section
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                const Text(
-                  'Top Staff',
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
+            // Doctor cards
+            SizedBox(
+              height: 140,
+              child: ListView(
+                scrollDirection: Axis.horizontal,
+                padding: const EdgeInsets.symmetric(horizontal: 12),
+                children: [
+                  _buildDoctorCard(
+                    'Dr. Med Aziz Beja',
+                    'Surgeon',
+                    'assets/images/doctor.jpg',
                   ),
-                ),
-                TextButton(
-                  onPressed: () {},
-                  child: const Text('See all', style: TextStyle(color: Colors.blue)),
-                ),
-              ],
+                  _buildDoctorCard(
+                    'Amira Isabldi',
+                    'Nurse',
+                    'https://via.placeholder.com/80',
+                  ),
+                  _buildDoctorCard(
+                    'Samar Rezgui',
+                    'Orthopedics',
+                    'https://via.placeholder.com/80',
+                  ),
+                  _buildDoctorCard(
+                    'Samar Rezgui',
+                    'Orthopedics',
+                    'https://via.placeholder.com/80',
+                  ),
+                ],
+              ),
             ),
-          ),
 
-          const SizedBox(height: 8),
-
-          // Doctor cards
-          SizedBox(
-            height: 140,
-            child: ListView(
-              scrollDirection: Axis.horizontal,
-              padding: const EdgeInsets.symmetric(horizontal: 12),
-              children: [
-                _buildDoctorCard(
-                  'Dr. Med Aziz Beja',
-                  'Surgeon',
-                  'assets/images/doctor.jpg',
-                ),
-                _buildDoctorCard(
-                  'Amira Isabldi',
-                  'Nurse',
-                  'https://via.placeholder.com/80',
-                ),
-                _buildDoctorCard(
-                  'Samar Rezgui',
-                  'Orthopedics',
-                  'https://via.placeholder.com/80',
-                ),
-                _buildDoctorCard(
-                  'Samar Rezgui',
-                  'Orthopedics',
-                  'https://via.placeholder.com/80',
-                ),
-              ],
+            // Stats section
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  const Text(
+                    'Statistics',
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  TextButton(
+                    onPressed: () {
+                      normalPush(context: context, direction: Stats());
+                    },
+                    child: const Text('See all', style: TextStyle(color: Colors.blue)),
+                  ),
+                ],
+              ),
             ),
-          ),
-        ],
+
+          ],
+        ),
       ),
     );
   }

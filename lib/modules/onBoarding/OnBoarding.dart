@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:smar_bin/modules/Auth.dart';
-import 'package:smar_bin/modules/HomeScreen.dart';
 import 'package:smar_bin/services/SharedPrefsHelper.dart';
 import 'package:smar_bin/shared/components/navigator.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
@@ -40,6 +40,20 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   final _boardingController = PageController();
 
   bool isLast = false;
+
+  late String selectedLang;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getLang();
+  }
+
+  Future<void> getLang() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String langCode = prefs.getString('language') ?? 'en';  // Default to 'en' if no preference is found
+  }
 
   @override
   Widget build(BuildContext context) {

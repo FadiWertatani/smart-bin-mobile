@@ -1,8 +1,22 @@
 {
   "hello": "Bonjour",
   "language": "Langue",
+  "welcome" : "Bienvenue à Smart Waste Management !",
   "letsGetStarted": "Commençons!",
   "loginSubtitle": "Connectez-vous pour profiter des fonctionnalités que nous avons fournies et restez sur la bonne voie!",
   "staff": "Employé",
-  "collector": "Collecteur"
+  "collector": "Collecteur",
+  "earnRewards": "Gagnez des récompenses pour être éco-responsable !",
+  "disposeSmart": "Jetez intelligemment.",
+  "getRewarded": "Soyez récompensé.",
+  "getQrCode": "Obtenir le code QR",
+  "searchHint": "Rechercher un médecin, des articles...",
+  "topStaff": "Personnel remarquable",
+  "seeAll": "Voir tout",
+  "drAziz": "Dr. Med Aziz Beja",
+  "surgeon": "Chirurgien",
+  "amira": "Amira Isabldi",
+  "nurse": "Infirmière",
+  "samar": "Samar Rezgui",
+  "orthopedics": "Orthopédie"
 }

@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class LanguageSelectionScreen extends StatefulWidget {
   const LanguageSelectionScreen({Key? key}) : super(key: key);
 
   @override
-  State<LanguageSelectionScreen> createState() => _LanguageSelectionScreenState();
+  State<LanguageSelectionScreen> createState() =>
+      _LanguageSelectionScreenState();
 }
 
 class _LanguageSelectionScreenState extends State<LanguageSelectionScreen> {
@@ -30,6 +32,40 @@ class _LanguageSelectionScreenState extends State<LanguageSelectionScreen> {
       'nativeName': 'Français'
     },
   ];
+
+  @override
+  void initState() {
+    super.initState();
+    _loadSelectedLanguage();
+    print(getSelectedLanguage());
+  }
+
+  // Load the selected language from SharedPreferences
+  _loadSelectedLanguage() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? savedLanguage = prefs.getString('language');
+    if (savedLanguage != null) {
+      setState(() {
+        _selectedLanguage = savedLanguage;
+      });
+    }
+  }
+
+  Future<String> getSelectedLanguage() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? savedLanguage = prefs.getString('language');
+    if (savedLanguage != null) {
+      return savedLanguage;
+    } else {
+      return "LANGUAGE IS NULL";
+    }
+  }
+
+  // Save the selected language to SharedPreferences
+  _saveSelectedLanguage(String language) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setString('language', language);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -83,7 +119,8 @@ class _LanguageSelectionScreenState extends State<LanguageSelectionScreen> {
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(12),
                     side: BorderSide(
-                      color: isSelected ? const Color(0xFF2962FF) : Colors.grey.shade200,
+                      color: isSelected ? const Color(0xFF2962FF) : Colors.grey
+                          .shade200,
                       width: isSelected ? 2 : 1,
                     ),
                   ),
@@ -134,8 +171,10 @@ class _LanguageSelectionScreenState extends State<LanguageSelectionScreen> {
             child: ElevatedButton(
               onPressed: () {
                 // Here you would save the selected language
+                _saveSelectedLanguage(_selectedLanguage);
+                print(getSelectedLanguage());
                 // and navigate back or to another screen
-                Navigator.pop(context, _selectedLanguage);
+                Navigator.pop(context);
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: const Color(0xFF2962FF),

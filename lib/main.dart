@@ -1,34 +1,31 @@
 import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:smar_bin/modules/onBoarding/OnBoarding.dart';
 import 'package:smar_bin/shared/blocObserver.dart';
 import 'package:smar_bin/shared/cubit/cubit.dart';
 import 'package:smar_bin/shared/network/local/cache_helper.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
   //Related to bloc states observation
   Bloc.observer = MyBlocObserver();
-  //Related to Shared Preferences
-  CacheHelper.init();
 
-  // Get saved language or default to English
-  // String langCode = CacheHelper.getData('language') ?? 'en';
+  // Load the saved language or default to English
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  String langCode = prefs.getString('language') ?? 'en';  // Default to 'en' if no preference is found
 
-  runApp(MyApp());
+  runApp(MyApp(langCode: langCode));
 }
 
-class MyApp extends StatefulWidget {
-  const MyApp({super.key});
+class MyApp extends StatelessWidget {
+  final String langCode;
 
-  @override
-  State<MyApp> createState() => _MyAppState();
-}
-
-class _MyAppState extends State<MyApp> {
-
+  const MyApp({Key? key, required this.langCode}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -41,7 +38,8 @@ class _MyAppState extends State<MyApp> {
           colorScheme: ColorScheme.fromSeed(
             seedColor: const Color(0xff015ff3),
             primary: const Color(0xff015ff3),
-            secondary: const Color(0xff76B4C0),
+            secondary: const Color(0xffD6E4FF),
+            outlineVariant: Colors.indigo.shade900,
           ),
           textTheme: const TextTheme(
             displayMedium: TextStyle(
@@ -63,10 +61,9 @@ class _MyAppState extends State<MyApp> {
           Locale('fr'),
           Locale('ar'),
         ],
-        locale: Locale('en'),
-        home: OnboardingScreen(),
+        locale: Locale(langCode), // Apply the language globally from the prefs
+        home: OnboardingScreen(), // No need to pass the onLanguageChanged function anymore
       ),
     );
   }
 }
-
