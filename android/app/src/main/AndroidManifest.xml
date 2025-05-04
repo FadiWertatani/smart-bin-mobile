@@ -32,13 +32,6 @@
             android:name="flutterEmbedding"
             android:value="2" />
 
-        <uses-permission android:name="android.permission.CAMERA"
-            tools:ignore="WrongManifestParent" />
-        <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"
-            tools:ignore="WrongManifestParent" />
-        <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"
-            tools:ignore="WrongManifestParent" />
-
     </application>
     <!-- Required to query activities that can process text, see:
          https://developer.android.com/training/package-visibility and

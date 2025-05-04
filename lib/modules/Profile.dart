@@ -49,7 +49,8 @@ class _ProfileState extends State<Profile> {
                 width: double.infinity,
                 decoration: BoxDecoration(
                   color: Theme.of(context).primaryColor,
-                  borderRadius: const BorderRadius.vertical(bottom: Radius.circular(20)),
+                  borderRadius:
+                      const BorderRadius.vertical(bottom: Radius.circular(20)),
                 ),
                 child: Column(
                   children: [
@@ -57,9 +58,9 @@ class _ProfileState extends State<Profile> {
                       radius: 40,
                       backgroundImage: user.profileImage != null
                           ? NetworkImage(user.profileImage!)
-                          : const AssetImage('assets/images/avatar.png') as ImageProvider,
+                          : const AssetImage('assets/images/avatar.png')
+                              as ImageProvider,
                     ),
-
                     const SizedBox(height: 10),
                     Text(
                       user.fullName ?? "No name",
@@ -73,15 +74,15 @@ class _ProfileState extends State<Profile> {
                     ElevatedButton(
                       onPressed: _pickAndUploadImage,
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.orange,
-                        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                        backgroundColor: Colors.indigo.shade900,
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 20, vertical: 10),
                       ),
                       child: const Text(
                         "Edit Profile Picture",
                         style: TextStyle(color: Colors.white),
                       ),
                     ),
-
                   ],
                 ),
               ),
@@ -90,15 +91,32 @@ class _ProfileState extends State<Profile> {
                   padding: const EdgeInsets.all(16),
                   children: [
                     sectionTitle(text: 'Account Settings'),
-                    buildSettingsItem(icon: Icons.card_giftcard, label: 'Mobile Reward', context: context),
-                    buildSettingsItem(icon: Icons.fingerprint, label: 'Sidik Jari & Face ID', context: context),
-                    buildSettingsItem(icon: Iconsax.global, label: 'Language', direction: LanguageSelectionScreen(), context: context),
-                    buildSettingsItem(icon: Icons.link, label: 'Link Account', context: context),
-                    const SizedBox(height: 20),
+                    buildSettingsItem(
+                        icon: Icons.card_giftcard,
+                        label: 'Mobile Reward',
+                        context: context),
+                    buildSettingsItem(
+                        icon: Iconsax.edit,
+                        label: 'Infos',
+                        context: context),
+                    buildSettingsItem(
+                        icon: Iconsax.global,
+                        label: 'Language',
+                        direction: LanguageSelectionScreen(),
+                        context: context),
                     sectionTitle(text: 'Other'),
-                    buildSettingsItem(icon: Icons.help_outline, label: 'Help', context: context),
-                    buildSettingsItem(icon: Icons.rule, label: 'Terms & Conditions', context: context),
-                    buildSettingsItem(icon: Icons.privacy_tip, label: 'Privacy Policy', context: context),
+                    buildSettingsItem(
+                        icon: Icons.help_outline,
+                        label: 'Help',
+                        context: context),
+                    buildSettingsItem(
+                        icon: Icons.rule,
+                        label: 'Terms & Conditions',
+                        context: context),
+                    buildSettingsItem(
+                        icon: Icons.privacy_tip,
+                        label: 'Privacy Policy',
+                        context: context),
                     const SizedBox(height: 20),
                     sectionTitle(text: 'Logout'),
                     GestureDetector(
@@ -111,12 +129,17 @@ class _ProfileState extends State<Profile> {
                           side: BorderSide(color: Colors.grey.shade200),
                         ),
                         child: ListTile(
-                          leading: const Icon(Iconsax.logout, color: Colors.red, size: 24),
+                          leading: const Icon(Iconsax.logout,
+                              color: Colors.red, size: 24),
                           title: const Text(
                             'Logout',
-                            style: TextStyle(color: Colors.red, fontSize: 16, fontWeight: FontWeight.w400),
+                            style: TextStyle(
+                                color: Colors.red,
+                                fontSize: 16,
+                                fontWeight: FontWeight.w400),
                           ),
-                          trailing: const Icon(Icons.chevron_right, color: Colors.grey),
+                          trailing: const Icon(Icons.chevron_right,
+                              color: Colors.grey),
                         ),
                       ),
                     ),
@@ -140,7 +163,8 @@ class _ProfileState extends State<Profile> {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Icon(Icons.logout, size: 50, color: Theme.of(context).primaryColor),
+              Icon(Icons.logout,
+                  size: 50, color: Theme.of(context).primaryColor),
               const SizedBox(height: 20),
               const Text(
                 'Do you want to logout ?',
@@ -158,14 +182,17 @@ class _ProfileState extends State<Profile> {
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Theme.of(context).primaryColor,
                   minimumSize: const Size(double.infinity, 50),
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(25)),
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(25)),
                 ),
-                child: const Text('Logout', style: TextStyle(color: Colors.white)),
+                child:
+                    const Text('Logout', style: TextStyle(color: Colors.white)),
               ),
               const SizedBox(height: 10),
               TextButton(
                 onPressed: () => Navigator.of(context).pop(),
-                child: const Text('Cancel', style: TextStyle(color: Colors.grey)),
+                child:
+                    const Text('Cancel', style: TextStyle(color: Colors.grey)),
               ),
             ],
           ),
@@ -185,13 +212,14 @@ class _ProfileState extends State<Profile> {
       if (email != null) {
         bool success = await ApiService().uploadProfileImage(email, imageFile);
         if (success) {
-          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Profile picture updated!")));
-          setState(() {}); // This will trigger FutureBuilder to refetch the user
+          flutterToast(message: 'Profile picture updated!', backgroundColor: Colors.green);
+          setState(
+              () {}); // This will trigger FutureBuilder to refetch the user
         } else {
-          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Upload failed.")));
+          ScaffoldMessenger.of(context)
+              .showSnackBar(SnackBar(content: Text("Upload failed.")));
         }
       }
     }
   }
-
 }

@@ -34,27 +34,36 @@ class _QrCodeScreenState extends State<QrCodeScreen> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        backgroundColor: Colors.white,
-        elevation: 0,
+        title: const Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'QR Code',
+              style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.w500,
+                color: Colors.black,
+              ),
+            ),
+            SizedBox(height: 4), // Added spacing between texts
+            Text(
+              'Let the camera scan your QR',
+              style: TextStyle(
+                fontSize: 14,
+                fontWeight: FontWeight.normal,
+                color: Colors.grey,
+              ),
+            ),
+          ],
+        ),
+        titleSpacing: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.black),
+          icon: const Icon(Icons.arrow_back, color: Colors.grey),
           onPressed: () => Navigator.of(context).pop(),
         ),
-        title: const Text(
-          'QR Code',
-          style: TextStyle(
-            color: Colors.black,
-            fontSize: 18,
-            fontWeight: FontWeight.w500,
-          ),
-        ),
-        centerTitle: true,
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.more_vert, color: Colors.black),
-            onPressed: () {},
-          )
-        ],
+        backgroundColor: Colors.white,
+        elevation: 0,
+        toolbarHeight: 80, // Increased from 70 to 80
       ),
       body: Center(
         child: Column(
