@@ -1,11 +1,33 @@
+import 'package:card_swiper/card_swiper.dart';
 import 'package:flutter/material.dart';
 import 'package:smar_bin/modules/QrScreen.dart';
 import 'package:smar_bin/modules/Stats.dart';
+import 'package:smar_bin/modules/stats/Co2LinearGaugeScreen.dart';
+import 'package:smar_bin/modules/stats/DailyStreakScreen.dart';
+import 'package:smar_bin/modules/stats/GiftPointsScreen.dart';
+import 'package:smar_bin/modules/stats/RecyclablePieScreen.dart';
+import 'package:smar_bin/modules/stats/TopRankGaugeScreen.dart';
+import 'package:smar_bin/modules/stats/TrashBarChartScreen.dart';
+import 'package:smar_bin/services/api_service.dart';
 import 'package:smar_bin/shared/components/StatGauge.dart';
+import 'package:smar_bin/shared/components/StatsCard.dart';
 import 'package:smar_bin/shared/components/navigator.dart';
 
-class HomeScreen extends StatelessWidget {
-  const HomeScreen({Key? key}) : super(key: key);
+class HomeScreen extends StatefulWidget {
+  HomeScreen({Key? key}) : super(key: key);
+
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  late Future<List<Map<String, dynamic>>> _futureUsers;
+
+  @override
+  void initState() {
+    super.initState();
+    _futureUsers = ApiService().fetchUsers();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -36,8 +58,10 @@ class HomeScreen extends StatelessWidget {
                           borderRadius: BorderRadius.circular(10),
                         ),
                         child: GestureDetector(
-                          child: const Icon(Icons.qr_code_scanner_rounded, size: 22),
-                          onTap: () => normalPush(context: context, direction: QrCodeScreen()),
+                          child: const Icon(Icons.qr_code_scanner_rounded,
+                              size: 22),
+                          onTap: () => normalPush(
+                              context: context, direction: QrCodeScreen()),
                         ),
                       ),
                       const SizedBox(width: 10),
@@ -111,9 +135,11 @@ class HomeScreen extends StatelessWidget {
                           ElevatedButton(
                             onPressed: null,
                             style: ButtonStyle(
-                              backgroundColor: MaterialStatePropertyAll(Color(0xff015ff3)),
+                              backgroundColor:
+                                  MaterialStatePropertyAll(Color(0xff015ff3)),
                               padding: MaterialStatePropertyAll(
-                                EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                                EdgeInsets.symmetric(
+                                    horizontal: 16, vertical: 8),
                               ),
                             ),
                             child: Text(
@@ -159,13 +185,45 @@ class HomeScreen extends StatelessWidget {
                   ),
                   TextButton(
                     onPressed: () {},
-                    child: const Text('See all', style: TextStyle(color: Colors.blue)),
+                    child: const Text('See all',
+                        style: TextStyle(color: Colors.blue)),
                   ),
                 ],
               ),
             ),
 
             const SizedBox(height: 8),
+
+            FutureBuilder<List<Map<String, dynamic>>>(
+              future: _futureUsers,
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const Center(child: CircularProgressIndicator());
+                } else if (snapshot.hasError) {
+                  return Center(child: Text('Error: ${snapshot.error}'));
+                } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                  return const Center(child: Text('No users found'));
+                }
+
+                final users = snapshot.data!;
+                return ListView.builder(
+                  itemCount: users.length,
+                  itemBuilder: (context, index) {
+                    final user = users[index];
+                    return Card(
+                      margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                      child: ListTile(
+                        leading: const CircleAvatar(
+                          backgroundImage: NetworkImage('https://via.placeholder.com/80'),
+                        ),
+                        title: Text(user['name'] ?? 'Unknown'),
+                        subtitle: Text(user['role'] ?? 'No role'),
+                      ),
+                    );
+                  },
+                );
+              },
+            ),
 
             // Doctor cards
             SizedBox(
@@ -215,11 +273,165 @@ class HomeScreen extends StatelessWidget {
                     onPressed: () {
                       normalPush(context: context, direction: Stats());
                     },
-                    child: const Text('See all', style: TextStyle(color: Colors.blue)),
+                    child: const Text('See all',
+                        style: TextStyle(color: Colors.blue)),
                   ),
                 ],
               ),
             ),
+
+            // SingleChildScrollView(
+            //   scrollDirection: Axis.horizontal,
+            //   padding: const EdgeInsets.symmetric(horizontal: 16),
+            //   child: Row(
+            //     children: [
+            //       StatInfoCard(
+            //         title: 'Gift Points',
+            //         summary: 'You earned 45 points today.',
+            //         date: 'Today',
+            //         time: '08:00 AM',
+            //         status: 'On track',
+            //         backgroundColor: const Color(0xFF4A148C), // Deep Purple
+            //         textColor: Colors.white,
+            //         onTap: () {}, // Will be used later for navigation
+            //       ),
+            //       const SizedBox(width: 16),
+            //       StatInfoCard(
+            //         title: 'Trash Stats',
+            //         summary: 'You threw 2.4kg of trash.',
+            //         date: 'Today',
+            //         time: '10:15 AM',
+            //         status: 'Moderate',
+            //         backgroundColor: const Color(0xFF1B5E20), // Dark Green
+            //         textColor: Colors.white,
+            //         onTap: () {},
+            //       ),
+            //       const SizedBox(width: 16),
+            //       StatInfoCard(
+            //         title: 'Recyclables',
+            //         summary: '60% of your waste is recyclable.',
+            //         date: 'This Week',
+            //         time: '02:00 PM',
+            //         status: 'Good job!',
+            //         backgroundColor: const Color(0xFF01579B), // Blue dark
+            //         textColor: Colors.white,
+            //         onTap: () {},
+            //       ),
+            //       const SizedBox(width: 16),
+            //       StatInfoCard(
+            //         title: 'CO₂ Emission',
+            //         summary: 'Your CO₂ level is below average.',
+            //         date: 'Today',
+            //         time: '09:10 AM',
+            //         status: 'Eco-friendly',
+            //         backgroundColor: const Color(0xFF00695C), // Teal dark
+            //         textColor: Colors.white,
+            //         onTap: () {},
+            //       ),
+            //       const SizedBox(width: 16),
+            //       StatInfoCard(
+            //         title: 'Daily Streak',
+            //         summary: '5-day eco streak maintained.',
+            //         date: 'This Week',
+            //         time: '07:00 AM',
+            //         status: 'Keep it up!',
+            //         backgroundColor: const Color(0xFFEF6C00), // Orange dark
+            //         textColor: Colors.white,
+            //         onTap: () {},
+            //       ),
+            //       const SizedBox(width: 16),
+            //       StatInfoCard(
+            //         title: 'Top Rank',
+            //         summary: 'You’re currently ranked #2.',
+            //         date: 'This Month',
+            //         time: '05:00 PM',
+            //         status: 'Awesome!',
+            //         backgroundColor: const Color(0xFF3E2723), // Brown dark
+            //         textColor: Colors.white,
+            //         onTap: () {},
+            //       ),
+            //     ],
+            //   ),
+            // ),
+
+            // Stats-style cards (instead of doctor cards)
+            SizedBox(
+              height: 160,
+              child: ListView(
+                scrollDirection: Axis.horizontal,
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                children: [
+                  StatInfoCard(
+                    title: 'Gift Points',
+                    summary: 'You earned 45 points today.',
+                    date: 'Today',
+                    time: '08:00 AM',
+                    status: 'On track',
+                    backgroundColor: Colors.indigo.shade900, // Deep Purple
+                    textColor: Colors.white,
+                    onTap: () => normalPush(context: context, direction: GiftPointsScreen()),
+                  ),
+                  const SizedBox(width: 16),
+                  StatInfoCard(
+                    title: 'Trash Stats',
+                    summary: 'You threw 2.4kg of trash.',
+                    date: 'Today',
+                    time: '10:15 AM',
+                    status: 'Moderate',
+                    backgroundColor: Colors.indigo.shade500, // Dark Green
+                    textColor: Colors.white,
+                    onTap: () => normalPush(context: context, direction: TrashBarChartScreen()),
+                  ),
+                  const SizedBox(width: 16),
+                  StatInfoCard(
+                    title: 'Recyclables',
+                    summary: '60% of your waste is recyclable.',
+                    date: 'This Week',
+                    time: '02:00 PM',
+                    status: 'Good job!',
+                    backgroundColor: Colors.indigo.shade900, // Blue dark
+                    textColor: Colors.white,
+                    onTap: () => normalPush(context: context, direction: RecyclablePieScreen()),
+                  ),
+                  const SizedBox(width: 16),
+                  StatInfoCard(
+                    title: 'CO₂ Emission',
+                    summary: 'Your CO₂ level is below average.',
+                    date: 'Today',
+                    time: '09:10 AM',
+                    status: 'Eco-friendly',
+                    backgroundColor: Colors.indigo.shade500, // Teal dark
+                    textColor: Colors.white,
+                    onTap: () => normalPush(context: context, direction: Co2LinearGaugeScreen()),
+                  ),
+                  const SizedBox(width: 16),
+                  StatInfoCard(
+                    title: 'Daily Streak',
+                    summary: '5-day eco streak maintained.',
+                    date: 'This Week',
+                    time: '07:00 AM',
+                    status: 'Keep it up!',
+                    backgroundColor: Colors.indigo.shade900, // Orange dark
+                    textColor: Colors.white,
+                    onTap: () => normalPush(context: context, direction: DailyStreakScreen()),
+                  ),
+                  const SizedBox(width: 16),
+                  StatInfoCard(
+                    title: 'Top Rank',
+                    summary: 'You’re currently ranked #2.',
+                    date: 'This Month',
+                    time: '05:00 PM',
+                    status: 'Awesome!',
+                    backgroundColor: Colors.indigo.shade500, // Brown dark
+                    textColor: Colors.white,
+                    onTap: () => normalPush(context: context, direction: TopRankGaugeScreen()),
+                  ),
+                ],
+              ),
+            ),
+
+            const SizedBox(height: 24),
+
 
           ],
         ),
@@ -279,6 +491,29 @@ class HomeScreen extends StatelessWidget {
             ),
           ),
       ],
+    );
+  }
+
+  Widget _buildStatCard(
+    BuildContext context, {
+    required String title,
+    required IconData icon,
+    required Color color,
+    required VoidCallback onTap,
+  }) {
+    return Card(
+      margin: const EdgeInsets.symmetric(vertical: 8),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+      elevation: 2,
+      child: ListTile(
+        leading: CircleAvatar(
+          backgroundColor: color.withOpacity(0.2),
+          child: Icon(icon, color: color),
+        ),
+        title: Text(title),
+        trailing: const Icon(Icons.arrow_forward_ios, size: 16),
+        onTap: onTap,
+      ),
     );
   }
 }

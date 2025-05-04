@@ -1,10 +1,12 @@
 import 'package:dio/dio.dart';
+import 'package:smar_bin/models/User.dart';
 import 'package:smar_bin/services/SharedPrefsHelper.dart';
 import 'package:uuid/uuid.dart';
 import 'dart:io';
 
 class ApiService {
-  static const String BASE_URL = 'https://smartbin-backend.onrender.com';
+  // static const String BASE_URL = 'https://smartbin-backend.onrender.com';
+  static const String BASE_URL = 'http://192.168.43.31:5000';
 
   // Private constructor
   ApiService._internal();
@@ -116,22 +118,51 @@ class ApiService {
     }
   }
 
-  // Fetch user code method (new method)
-  Future<String?> fetchUserCode(String email) async {
+  Future<List<Map<String, dynamic>>> fetchUsers() async {
     try {
-      // Making GET request to fetch the user code based on userId
-      Response response = await _dio.get('/user/$email/user_code');
-
+      final response = await _dio.get('/api/users');
       if (response.statusCode == 200) {
-        return response.data['user_code']; // Return the unique code
+        return List<Map<String, dynamic>>.from(response.data);
       } else {
-        return null; // If no code is found or error occurs
+        throw Exception('Failed to load users');
       }
     } catch (e) {
-      print('Error fetching user code: $e');
-      return null;
+      print('Error fetching users: $e');
+      rethrow;
     }
   }
+
+  Future<User> fetchUserByEmail(String email) async {
+    try {
+      final response = await _dio.get('/api/users/$email');
+
+      if (response.statusCode == 200) {
+        return User.fromJson(response.data);
+      } else {
+        throw Exception('Failed to fetch user');
+      }
+    } catch (e) {
+      print('Error fetching user by email: $e');
+      rethrow;
+    }
+  }
+
+  // // Fetch user code method (new method)
+  // Future<String?> fetchUserCode(String email) async {
+  //   try {
+  //     // Making GET request to fetch the user code based on userId
+  //     Response response = await _dio.get('/user/$email/user_code');
+  //
+  //     if (response.statusCode == 200) {
+  //       return response.data['user_code']; // Return the unique code
+  //     } else {
+  //       return null; // If no code is found or error occurs
+  //     }
+  //   } catch (e) {
+  //     print('Error fetching user code: $e');
+  //     return null;
+  //   }
+  // }
 
   Future<String?> getUserProfileImage(String email) async {
     try {
@@ -150,17 +181,16 @@ class ApiService {
     }
   }
 
-  Future<bool> uploadProfileImage(String userCode, File imageFile) async {
+  Future<bool> uploadProfileImage(String email, File imageFile) async {
     try {
       String fileName = imageFile.path.split('/').last;
       FormData formData = FormData.fromMap({
-        'image':
-            await MultipartFile.fromFile(imageFile.path, filename: fileName),
-        'user_code': userCode,
+        'image': await MultipartFile.fromFile(imageFile.path, filename: fileName),
+        'email': email,
       });
 
-      Response response =
-          await _dio.post('/upload-profile-image', data: formData);
+      Response response = await _dio.post('/upload-profile-image', data: formData);
+
       return response.statusCode == 200;
     } catch (e) {
       print('Error uploading image: $e');
@@ -168,43 +198,44 @@ class ApiService {
     }
   }
 
-  // Fetch staff list based on clinic
-  Future<List<Map<String, dynamic>>> fetchStaffsList(String clinic) async {
-    try {
-      Response response =
-          await _dio.get('/staff', queryParameters: {'clinic': clinic});
-
-      if (response.statusCode == 200) {
-        // Returning the list of doctors
-        return List<Map<String, dynamic>>.from(response.data);
-      } else {
-        return [];
-      }
-    } catch (e) {
-      print('Error fetching staff list: $e');
-      return [];
-    }
-  }
-
-  Future<Map<String, dynamic>> getUserData(String userCode) async {
-    try {
-      Response response = await _dio.get('/user/$userCode/data');
-      if (response.statusCode == 200) {
-        return response.data;
-      } else {
-        return {
-          'error': 'Erreur lors de la récupération des données',
-          'name': '',
-          'points': [],
-        };
-      }
-    } catch (e) {
-      print('Error getting user data: $e');
-      return {
-        'error': 'Erreur lors de la récupération des données',
-        'name': '',
-        'points': [],
-      };
-    }
-  }
+//
+  // // Fetch staff list based on clinic
+  // Future<List<Map<String, dynamic>>> fetchStaffsList(String clinic) async {
+  //   try {
+  //     Response response =
+  //         await _dio.get('/staff', queryParameters: {'clinic': clinic});
+  //
+  //     if (response.statusCode == 200) {
+  //       // Returning the list of doctors
+  //       return List<Map<String, dynamic>>.from(response.data);
+  //     } else {
+  //       return [];
+  //     }
+  //   } catch (e) {
+  //     print('Error fetching staff list: $e');
+  //     return [];
+  //   }
+  // }
+  //
+  // Future<Map<String, dynamic>> getUserData(String userCode) async {
+  //   try {
+  //     Response response = await _dio.get('/user/$userCode/data');
+  //     if (response.statusCode == 200) {
+  //       return response.data;
+  //     } else {
+  //       return {
+  //         'error': 'Erreur lors de la récupération des données',
+  //         'name': '',
+  //         'points': [],
+  //       };
+  //     }
+  //   } catch (e) {
+  //     print('Error getting user data: $e');
+  //     return {
+  //       'error': 'Erreur lors de la récupération des données',
+  //       'name': '',
+  //       'points': [],
+  //     };
+  //   }
+  // }
 }
