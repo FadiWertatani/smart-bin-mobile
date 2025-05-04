@@ -5,8 +5,8 @@ import 'package:uuid/uuid.dart';
 import 'dart:io';
 
 class ApiService {
-  // static const String BASE_URL = 'https://smartbin-backend.onrender.com';
-  static const String BASE_URL = 'http://192.168.43.31:5000';
+  static const String BASE_URL = 'https://smartbin-backend.onrender.com';
+  // static const String BASE_URL = 'http://192.168.43.31:5000';
 
   // Private constructor
   ApiService._internal();
@@ -144,6 +144,29 @@ class ApiService {
     } catch (e) {
       print('Error fetching user by email: $e');
       rethrow;
+    }
+  }
+
+  /// Fetch gift points by email
+  Future<int?> getGiftPointsByEmail(String email) async {
+    try {
+      final response = await _dio.get('/api/users/giftpoints/$email');
+
+      if (response.statusCode == 200) {
+        return response.data['giftpoints'];
+      } else if (response.statusCode == 404) {
+        print('Data not found');
+        return null;
+      } else {
+        print('Unexpected error: ${response.statusCode}');
+        return null;
+      }
+    } on DioException catch (e) {
+      print('Dio error: ${e.message}');
+      return null;
+    } catch (e) {
+      print('Unknown error: $e');
+      return null;
     }
   }
 

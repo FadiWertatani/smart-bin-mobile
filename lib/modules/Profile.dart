@@ -216,8 +216,7 @@ class _ProfileState extends State<Profile> {
           setState(
               () {}); // This will trigger FutureBuilder to refetch the user
         } else {
-          ScaffoldMessenger.of(context)
-              .showSnackBar(SnackBar(content: Text("Upload failed.")));
+          flutterToast(message: "Upload failed", backgroundColor: Colors.red);
         }
       }
     }

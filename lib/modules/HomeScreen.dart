@@ -464,6 +464,12 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
+  void _loadGiftPoints() async {
+    final points = await ApiService().getGiftPointsByEmail("test@example.com");
+    print("Gift Points: $points");
+  }
+
+
   Widget _buildStatCard(
     BuildContext context, {
     required String title,

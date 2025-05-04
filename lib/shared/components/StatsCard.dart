@@ -32,33 +32,38 @@ class StatInfoCard extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(title,
-                style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                    color: textColor)),
-            const SizedBox(height: 8),
-            Text(summary,
-                style: TextStyle(fontSize: 14, color: textColor.withOpacity(0.9))),
-            const SizedBox(height: 12),
-            Row(
-              children: [
-                Icon(Icons.calendar_today, size: 14, color: textColor),
-                const SizedBox(width: 4),
-                Text(date, style: TextStyle(fontSize: 12, color: textColor)),
-              ],
-            ),
-            const SizedBox(height: 4),
-            Row(
-              children: [
-                Icon(Icons.access_time, size: 14, color: textColor),
-                const SizedBox(width: 4),
-                Text(time, style: TextStyle(fontSize: 12, color: textColor)),
-              ],
+            Text(
+              title,
+              style: TextStyle(
+                  fontSize: 16, fontWeight: FontWeight.bold, color: textColor),
             ),
             const SizedBox(height: 8),
-            Text(status,
-                style: TextStyle(fontSize: 12, color: textColor.withOpacity(0.8))),
+            Text(
+              summary,
+              style: TextStyle(
+                fontSize: 14,
+                color: textColor.withOpacity(0.9),
+              ),
+            ),
+            // const SizedBox(height: 12),
+            // Row(
+            //   children: [
+            //     Icon(Icons.calendar_today, size: 14, color: textColor),
+            //     const SizedBox(width: 4),
+            //     Text(date, style: TextStyle(fontSize: 12, color: textColor)),
+            //   ],
+            // ),
+            // const SizedBox(height: 4),
+            // Row(
+            //   children: [
+            //     Icon(Icons.access_time, size: 14, color: textColor),
+            //     const SizedBox(width: 4),
+            //     Text(time, style: TextStyle(fontSize: 12, color: textColor)),
+            //   ],
+            // ),
+            // const SizedBox(height: 8),
+            // Text(status,
+            //     style: TextStyle(fontSize: 12, color: textColor.withOpacity(0.8))),
           ],
         ),
       ),

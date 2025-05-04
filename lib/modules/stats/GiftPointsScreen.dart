@@ -1,8 +1,34 @@
 import 'package:flutter/material.dart';
+import 'package:smar_bin/services/SharedPrefsHelper.dart';
 import 'package:smar_bin/shared/components/GiftPointsWidget.dart';
+import 'package:smar_bin/services/api_service.dart'; // Make sure this import is correct
 
-class GiftPointsScreen extends StatelessWidget {
+class GiftPointsScreen extends StatefulWidget {
+
   const GiftPointsScreen({super.key});
+
+  @override
+  State<GiftPointsScreen> createState() => _GiftPointsScreenState();
+}
+
+class _GiftPointsScreenState extends State<GiftPointsScreen> {
+  int? giftPoints;
+  final int maxPoints = 100; // You can fetch this dynamically too if needed
+  bool isLoading = true;
+
+  @override
+  void initState() {
+    super.initState();
+    fetchGiftPoints();
+  }
+
+  void fetchGiftPoints() async {
+    final points = await ApiService().getGiftPointsByEmail("fadi@gmail.com");
+    setState(() {
+      giftPoints = points;
+      isLoading = false;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -13,16 +39,16 @@ class GiftPointsScreen extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Language',
+              'Gift Points',
               style: TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.w500,
                 color: Colors.black,
               ),
             ),
-            SizedBox(height: 4), // Added spacing between texts
+            SizedBox(height: 4),
             Text(
-              'Choose your preferred language.',
+              'Your current gift points.',
               style: TextStyle(
                 fontSize: 14,
                 fontWeight: FontWeight.normal,
@@ -38,15 +64,16 @@ class GiftPointsScreen extends StatelessWidget {
         ),
         backgroundColor: Colors.white,
         elevation: 0,
-        toolbarHeight: 80, // Increased from 70 to 80
+        toolbarHeight: 80,
       ),
       body: Center(
         child: Padding(
           padding: const EdgeInsets.all(24.0),
-          child: GiftPointsWidget(
-            points: 78,       // Example value — replace with dynamic if needed
-            maxPoints: 100,   // Set this to your actual max
-          ),
+          child: isLoading
+              ? const CircularProgressIndicator()
+              : giftPoints != null
+              ? GiftPointsWidget(points: giftPoints!.toDouble(), maxPoints: maxPoints.toDouble())
+              : const Text('Unable to load gift points'),
         ),
       ),
     );
