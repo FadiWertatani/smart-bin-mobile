@@ -70,4 +70,10 @@ class SharedPrefsHelper {
     return prefs.getString('on_boarding');
   }
 
+  // Retrieve user code from SharedPreferences
+  static Future<String?> getLanguage() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    return prefs.getString('language');
+  }
+
 }

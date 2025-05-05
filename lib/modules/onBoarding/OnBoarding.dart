@@ -4,6 +4,8 @@ import 'package:smar_bin/modules/Auth.dart';
 import 'package:smar_bin/services/SharedPrefsHelper.dart';
 import 'package:smar_bin/shared/components/navigator.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 
 class OnboardingScreen extends StatefulWidget {
 
@@ -47,15 +49,15 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    getLang();
+    // getLang();
     print(SharedPrefsHelper.getOnBoarding());
   }
 
-  Future<void> getLang() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    String langCode = prefs.getString('language') ??
-        'en'; // Default to 'en' if no preference is found
-  }
+  // Future<void> getLang() async {
+  //   SharedPreferences prefs = await SharedPreferences.getInstance();
+  //   String langCode = prefs.getString('language') ??
+  //       'en'; // Default to 'en' if no preference is found
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -70,8 +72,8 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                 direction: AuthScreen(),
               );
             },
-            child: const Text(
-              'SKIP',
+            child: Text(
+              AppLocalizations.of(context)!.welcome,
               style: TextStyle(
                 fontSize: 18.0,
               ),

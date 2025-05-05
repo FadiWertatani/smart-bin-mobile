@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:smar_bin/services/SharedPrefsHelper.dart';
 
 class LanguageSelectionScreen extends StatefulWidget {
   const LanguageSelectionScreen({Key? key}) : super(key: key);
@@ -10,7 +11,7 @@ class LanguageSelectionScreen extends StatefulWidget {
 }
 
 class _LanguageSelectionScreenState extends State<LanguageSelectionScreen> {
-  String _selectedLanguage = 'English';
+  String _selectedLanguage = 'en';
 
   final List<Map<String, dynamic>> _languages = [
     {
@@ -37,7 +38,7 @@ class _LanguageSelectionScreenState extends State<LanguageSelectionScreen> {
   void initState() {
     super.initState();
     _loadSelectedLanguage();
-    print(getSelectedLanguage());
+    print("LANG: " + SharedPrefsHelper.getLanguage().toString());
   }
 
   // Load the selected language from SharedPreferences
@@ -64,7 +65,7 @@ class _LanguageSelectionScreenState extends State<LanguageSelectionScreen> {
   // Save the selected language to SharedPreferences
   _saveSelectedLanguage(String language) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    await prefs.setString('language', language);
+    await prefs.setString('language', 'fr');
   }
 
   @override
@@ -169,13 +170,18 @@ class _LanguageSelectionScreenState extends State<LanguageSelectionScreen> {
           Padding(
             padding: const EdgeInsets.all(16),
             child: ElevatedButton(
-              onPressed: () {
-                // Here you would save the selected language
-                _saveSelectedLanguage(_selectedLanguage);
-                print(getSelectedLanguage());
-                // and navigate back or to another screen
+              onPressed: () async {
+                // Save the selected language
+                await _saveSelectedLanguage(_selectedLanguage);
+
+                // Get and print the saved language
+                String selectedLang = await getSelectedLanguage();
+                print("Selected Language: $selectedLang");
+
+                // Navigate back
                 Navigator.pop(context);
               },
+
               style: ElevatedButton.styleFrom(
                 backgroundColor: const Color(0xFF2962FF),
                 foregroundColor: Colors.white,

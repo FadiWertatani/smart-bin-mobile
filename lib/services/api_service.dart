@@ -5,8 +5,8 @@ import 'package:uuid/uuid.dart';
 import 'dart:io';
 
 class ApiService {
-  static const String BASE_URL = 'https://smartbin-backend.onrender.com';
-  // static const String BASE_URL = 'http://192.168.43.31:5000';
+  // static const String BASE_URL = 'https://smartbin-backend.onrender.com';
+  static const String BASE_URL = 'http://192.168.43.31:5000';
 
   // Private constructor
   ApiService._internal();
