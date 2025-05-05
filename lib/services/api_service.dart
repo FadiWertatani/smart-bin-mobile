@@ -1,12 +1,16 @@
+import 'dart:convert';
+
 import 'package:dio/dio.dart';
 import 'package:smar_bin/models/User.dart';
 import 'package:smar_bin/services/SharedPrefsHelper.dart';
 import 'package:uuid/uuid.dart';
 import 'dart:io';
 
+import '../models/Bin.dart';
+
 class ApiService {
   // static const String BASE_URL = 'https://smartbin-backend.onrender.com';
-  static const String BASE_URL = 'http://192.168.43.31:5000';
+  static const String BASE_URL = 'http://192.168.1.26:5000';
 
   // Private constructor
   ApiService._internal();
@@ -220,6 +224,24 @@ class ApiService {
       return false;
     }
   }
+
+  Future<List<Bin>> fetchBins() async {
+    try {
+      final response = await _dio.get('/bins/fill-level');
+      if (response.statusCode == 200) {
+        final List<dynamic> jsonData = response.data;
+        return jsonData.map((json) => Bin.fromJson(json)).toList();
+      } else {
+        throw Exception('Failed to load bins: ${response.statusCode}');
+      }
+    } on DioError catch (e) {
+      // Log or handle Dio-specific errors
+      throw Exception('Network error: ${e.message}');
+    } catch (e) {
+      throw Exception('Unexpected error: $e');
+    }
+  }
+
 
 //
   // // Fetch staff list based on clinic

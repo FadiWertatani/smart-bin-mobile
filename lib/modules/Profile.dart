@@ -96,9 +96,7 @@ class _ProfileState extends State<Profile> {
                         label: 'Mobile Reward',
                         context: context),
                     buildSettingsItem(
-                        icon: Iconsax.edit,
-                        label: 'Infos',
-                        context: context),
+                        icon: Iconsax.edit, label: 'Infos', context: context),
                     buildSettingsItem(
                         icon: Iconsax.global,
                         label: 'Language',
@@ -163,8 +161,7 @@ class _ProfileState extends State<Profile> {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Icon(Icons.logout,
-                  size: 50, color: Theme.of(context).primaryColor),
+              Icon(Iconsax.logout, size: 50, color: Colors.red),
               const SizedBox(height: 20),
               const Text(
                 'Do you want to logout ?',
@@ -180,7 +177,7 @@ class _ProfileState extends State<Profile> {
                   noBackPush(context: context, direction: AuthScreen());
                 },
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Theme.of(context).primaryColor,
+                  backgroundColor: Colors.red,
                   minimumSize: const Size(double.infinity, 50),
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(25)),
@@ -191,8 +188,10 @@ class _ProfileState extends State<Profile> {
               const SizedBox(height: 10),
               TextButton(
                 onPressed: () => Navigator.of(context).pop(),
-                child:
-                    const Text('Cancel', style: TextStyle(color: Colors.grey)),
+                child: const Text(
+                  'Cancel',
+                  style: TextStyle(color: Colors.grey),
+                ),
               ),
             ],
           ),
@@ -212,7 +211,9 @@ class _ProfileState extends State<Profile> {
       if (email != null) {
         bool success = await ApiService().uploadProfileImage(email, imageFile);
         if (success) {
-          flutterToast(message: 'Profile picture updated!', backgroundColor: Colors.green);
+          flutterToast(
+              message: 'Profile picture updated!',
+              backgroundColor: Colors.green);
           setState(
               () {}); // This will trigger FutureBuilder to refetch the user
         } else {

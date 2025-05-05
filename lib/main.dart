@@ -8,7 +8,6 @@ import 'package:smar_bin/modules/Auth.dart';
 import 'package:smar_bin/modules/onBoarding/OnBoarding.dart';
 import 'package:smar_bin/shared/blocObserver.dart';
 import 'package:smar_bin/shared/cubit/cubit.dart';
-import 'package:smar_bin/shared/network/local/cache_helper.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

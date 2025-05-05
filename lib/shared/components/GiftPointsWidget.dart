@@ -23,9 +23,12 @@ class GiftPointsWidget extends StatelessWidget {
         Text(
           'Gift Points',
           style: TextStyle(
-            fontSize: 16,
-            fontWeight: FontWeight.w500,
+            fontSize: 20,
+            fontWeight: FontWeight.w700,
           ),
+        ),
+        SizedBox(
+          height: 20,
         ),
         SizedBox(
           height: gaugeSize,

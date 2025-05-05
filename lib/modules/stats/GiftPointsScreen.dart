@@ -13,22 +13,32 @@ class GiftPointsScreen extends StatefulWidget {
 
 class _GiftPointsScreenState extends State<GiftPointsScreen> {
   int? giftPoints;
-  final int maxPoints = 100; // You can fetch this dynamically too if needed
+  final int maxPoints = 100;
   bool isLoading = true;
 
   @override
   void initState() {
     super.initState();
-    fetchGiftPoints();
+    _init();
   }
 
-  void fetchGiftPoints() async {
-    final points = await ApiService().getGiftPointsByEmail("fadi@gmail.com");
+  void _init() async {
+    final email = await SharedPrefsHelper.getEmail();
+    print("2222 " + email.toString());
+    await fetchGiftPoints(email);
+  }
+
+
+  Future<void> fetchGiftPoints(String? email) async {
+    if (email == null) return;
+
+    final points = await ApiService().getGiftPointsByEmail(email);
     setState(() {
       giftPoints = points;
       isLoading = false;
     });
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -48,7 +58,7 @@ class _GiftPointsScreenState extends State<GiftPointsScreen> {
             ),
             SizedBox(height: 4),
             Text(
-              'Your current gift points.',
+              'Your current points for next reward',
               style: TextStyle(
                 fontSize: 14,
                 fontWeight: FontWeight.normal,
@@ -66,15 +76,18 @@ class _GiftPointsScreenState extends State<GiftPointsScreen> {
         elevation: 0,
         toolbarHeight: 80,
       ),
-      body: Center(
-        child: Padding(
-          padding: const EdgeInsets.all(24.0),
-          child: isLoading
-              ? const CircularProgressIndicator()
-              : giftPoints != null
-              ? GiftPointsWidget(points: giftPoints!.toDouble(), maxPoints: maxPoints.toDouble())
-              : const Text('Unable to load gift points'),
-        ),
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(24.0),
+            child: isLoading
+                ? const CircularProgressIndicator()
+                : giftPoints != null
+                ? GiftPointsWidget(points: giftPoints!.toDouble(), maxPoints: maxPoints.toDouble())
+                : const Text('Unable to load gift points'),
+          ),
+        ],
       ),
     );
   }

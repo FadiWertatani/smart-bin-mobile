@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:smar_bin/layout/CollectorLayout.dart';
 import 'package:smar_bin/layout/HomeLayout.dart';
+import 'package:smar_bin/modules/CollectorHomeScreen.dart';
 import 'package:smar_bin/modules/Register.dart';
-import 'package:smar_bin/services/SharedPrefsHelper.dart';
 import 'package:smar_bin/services/api_service.dart';
 import 'package:smar_bin/shared/components/component.dart';
 import 'package:smar_bin/shared/components/navigator.dart';
@@ -10,8 +11,9 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 
 class LoginScreen extends StatefulWidget {
+  final String profileType;
 
-  const LoginScreen({Key? key}) : super(key: key);
+  const LoginScreen({Key? key, required this.profileType}) : super(key: key);
 
 
   @override
@@ -23,61 +25,6 @@ class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController _passwordController = TextEditingController();
   bool _obscurePassword = true;
   bool _isLoading = false;
-
-  void _login() async {
-    final email = _emailController.text.trim();
-    final password = _passwordController.text;
-
-    if (email.isEmpty || password.isEmpty) {
-      flutterToast(message: "Email and Password are necessary", backgroundColor: Colors.red);
-      return;
-    }
-
-    setState(() {
-      _isLoading = true;
-    });
-
-    try {
-      var response = await ApiService().loginUser(email, password);
-
-      if (response.containsKey('error')) {
-        String errorMessage = response['error'];
-
-        if (errorMessage == 'Email not found') {
-          flutterToast(message: "Email Invalid!", backgroundColor: Colors.red);
-        }
-        else if (errorMessage == 'Incorrect password') {
-          flutterToast(message: "Password Incorrect!", backgroundColor: Colors.red);
-        }
-        else {
-          flutterToast(message: errorMessage, backgroundColor: Colors.red);
-        }
-      }
-      else if (response.containsKey('token')) {
-        // Retrieve user data from response
-        // Map<String, dynamic> userData = response['user'];
-        // String userCode = userData['user_code'];
-
-        // Store user_code in SharedPreferences if not already saved
-        // if (await SharedPrefsHelper.getUserCode() == null) {
-        //   await SharedPrefsHelper.saveUserCode(userCode);
-        // }
-
-        await Future.delayed(const Duration(seconds: 1));
-
-        if (mounted) {
-          noBackPush(context: context, direction: HomeLayout());
-        }
-      }
-    } catch (e) {
-      flutterToast(message: "Connexion error", backgroundColor: Colors.orangeAccent);
-      print(e);
-    }
-
-    setState(() {
-      _isLoading = false;
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -219,7 +166,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                     GestureDetector(
                       onTap: () {
-                        normalPush(context: context, direction: RegisterScreen());
+                        normalPush(context: context, direction: RegisterScreen(profileType: widget.profileType,));
                       },
                       child: Text(
                         " ${localizations.signUp}",
@@ -239,4 +186,60 @@ class _LoginScreenState extends State<LoginScreen> {
       ),
     );
   }
+
+  void _login() async {
+    final email = _emailController.text.trim();
+    final password = _passwordController.text;
+
+    if (email.isEmpty || password.isEmpty) {
+      flutterToast(message: "Email and Password are necessary", backgroundColor: Colors.red);
+      return;
+    }
+
+    setState(() {
+      _isLoading = true;
+    });
+
+    try {
+      var response = await ApiService().loginUser(email, password);
+
+      if (response.containsKey('error')) {
+        String errorMessage = response['error'];
+
+        if (errorMessage == 'Email not found') {
+          flutterToast(message: "Email Invalid!", backgroundColor: Colors.red);
+        }
+        else if (errorMessage == 'Incorrect password') {
+          flutterToast(message: "Password Incorrect!", backgroundColor: Colors.red);
+        }
+        else {
+          flutterToast(message: errorMessage, backgroundColor: Colors.red);
+        }
+      }
+      else if (response.containsKey('token')) {
+        // Retrieve user data from response
+        // Map<String, dynamic> userData = response['user'];
+        // String userCode = userData['user_code'];
+
+        // Store user_code in SharedPreferences if not already saved
+        // if (await SharedPrefsHelper.getUserCode() == null) {
+        //   await SharedPrefsHelper.saveUserCode(userCode);
+        // }
+
+        await Future.delayed(const Duration(seconds: 1));
+
+        if (mounted) {
+          noBackPush(context: context, direction: CollectorLayout());
+        }
+      }
+    } catch (e) {
+      flutterToast(message: "Connexion error", backgroundColor: Colors.orangeAccent);
+      print(e);
+    }
+
+    setState(() {
+      _isLoading = false;
+    });
+  }
+
 }

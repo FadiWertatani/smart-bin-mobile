@@ -1,7 +1,6 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
-import 'package:dropdown_search/dropdown_search.dart';
 import 'package:smar_bin/modules/Login.dart';
 import 'package:smar_bin/modules/Privacy.dart';
 import 'package:smar_bin/modules/Terms.dart';
@@ -10,7 +9,8 @@ import 'package:smar_bin/shared/components/navigator.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class RegisterScreen extends StatefulWidget {
-  const RegisterScreen({Key? key}) : super(key: key);
+  final String profileType;
+  const RegisterScreen({Key? key, required this.profileType}) : super(key: key);
 
   @override
   State<RegisterScreen> createState() => _RegisterScreenState();
@@ -361,7 +361,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
         ),
         GestureDetector(
           onTap: () {
-            normalPush(context: context, direction: LoginScreen());
+            normalPush(context: context, direction: LoginScreen(profileType: widget.profileType,));
           },
           child: Text(
             "Sign In",
@@ -444,7 +444,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
             TextButton(
               onPressed: () {
                 Navigator.of(context).pop();
-                normalPush(context: context, direction: LoginScreen());
+                normalPush(context: context, direction: LoginScreen(profileType: widget.profileType,));
               },
               child: const Text('OK'),
             ),

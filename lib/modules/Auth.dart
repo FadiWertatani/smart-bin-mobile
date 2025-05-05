@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:smar_bin/models/UserType.dart';
 import 'package:smar_bin/modules/Login.dart';
 import 'package:smar_bin/shared/components/navigator.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -8,7 +9,7 @@ class AuthScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final t = AppLocalizations.of(context)!;
+    final localization = AppLocalizations.of(context)!;
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -30,7 +31,7 @@ class AuthScreen extends StatelessWidget {
                     const SizedBox(height: 40),
 
                     Text(
-                      t.letsGetStarted,
+                      localization.letsGetStarted,
                       style: const TextStyle(
                         fontSize: 24,
                         fontWeight: FontWeight.bold,
@@ -40,7 +41,7 @@ class AuthScreen extends StatelessWidget {
                     const SizedBox(height: 12),
 
                     Text(
-                      t.loginSubtitle,
+                      localization.loginSubtitle,
                       style: const TextStyle(
                         fontSize: 16,
                         color: Colors.grey,
@@ -57,7 +58,7 @@ class AuthScreen extends StatelessWidget {
                         onPressed: () {
                           normalPush(
                             context: context,
-                            direction: LoginScreen(),
+                            direction: LoginScreen(profileType: UserType.STAFF.toString(),),
                           );
                         },
                         style: ElevatedButton.styleFrom(
@@ -69,7 +70,7 @@ class AuthScreen extends StatelessWidget {
                           elevation: 0,
                         ),
                         child: Text(
-                          t.staff,
+                          localization.staff,
                           style: const TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.w500,
@@ -86,7 +87,7 @@ class AuthScreen extends StatelessWidget {
                         onPressed: () {
                           normalPush(
                             context: context,
-                            direction: LoginScreen(),
+                            direction: LoginScreen(profileType: UserType.COLLECTOR.toString(),),
                           );
                         },
                         style: OutlinedButton.styleFrom(
@@ -100,7 +101,7 @@ class AuthScreen extends StatelessWidget {
                           ),
                         ),
                         child: Text(
-                          t.collector,
+                          localization.collector,
                           style: const TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.w500,

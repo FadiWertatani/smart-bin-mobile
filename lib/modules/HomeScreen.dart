@@ -194,35 +194,35 @@ class _HomeScreenState extends State<HomeScreen> {
 
             const SizedBox(height: 8),
 
-            SizedBox(
-              height: 140,
-              child: ListView(
-                scrollDirection: Axis.horizontal,
-                padding: const EdgeInsets.symmetric(horizontal: 12),
-                children: [
-                  _buildDoctorCard(
-                    'Dr. Med Aziz Beja',
-                    'Surgeon',
-                    'assets/images/doctor.jpg',
-                  ),
-                  _buildDoctorCard(
-                    'Amira Isabldi',
-                    'Nurse',
-                    'https://via.placeholder.com/80',
-                  ),
-                  _buildDoctorCard(
-                    'Samar Rezgui',
-                    'Orthopedics',
-                    'https://via.placeholder.com/80',
-                  ),
-                  _buildDoctorCard(
-                    'Samar Rezgui',
-                    'Orthopedics',
-                    'https://via.placeholder.com/80',
-                  ),
-                ],
-              ),
-            ),
+            // SizedBox(
+            //   height: 140,
+            //   child: ListView(
+            //     scrollDirection: Axis.horizontal,
+            //     padding: const EdgeInsets.symmetric(horizontal: 12),
+            //     children: [
+            //       _buildDoctorCard(
+            //         'Dr. Med Aziz Beja',
+            //         'Surgeon',
+            //         'assets/images/doctor.jpg',
+            //       ),
+            //       _buildDoctorCard(
+            //         'Amira Isabldi',
+            //         'Nurse',
+            //         'https://via.placeholder.com/80',
+            //       ),
+            //       _buildDoctorCard(
+            //         'Samar Rezgui',
+            //         'Orthopedics',
+            //         'https://via.placeholder.com/80',
+            //       ),
+            //       _buildDoctorCard(
+            //         'Samar Rezgui',
+            //         'Orthopedics',
+            //         'https://via.placeholder.com/80',
+            //       ),
+            //     ],
+            //   ),
+            // ),
 
             // Stats section
             Padding(
