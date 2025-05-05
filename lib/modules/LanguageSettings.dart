@@ -65,7 +65,7 @@ class _LanguageSelectionScreenState extends State<LanguageSelectionScreen> {
   // Save the selected language to SharedPreferences
   _saveSelectedLanguage(String language) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    await prefs.setString('language', 'fr');
+    await prefs.setString('language', language);
   }
 
   @override
@@ -112,7 +112,7 @@ class _LanguageSelectionScreenState extends State<LanguageSelectionScreen> {
               itemCount: _languages.length,
               itemBuilder: (context, index) {
                 final language = _languages[index];
-                final isSelected = _selectedLanguage == language['name'];
+                final isSelected = _selectedLanguage == language['code'];
 
                 return Card(
                   elevation: 0,
@@ -128,7 +128,7 @@ class _LanguageSelectionScreenState extends State<LanguageSelectionScreen> {
                   child: InkWell(
                     onTap: () {
                       setState(() {
-                        _selectedLanguage = language['name'];
+                        _selectedLanguage = language['code'];
                       });
                     },
                     borderRadius: BorderRadius.circular(12),

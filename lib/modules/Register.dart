@@ -7,6 +7,7 @@ import 'package:smar_bin/modules/Privacy.dart';
 import 'package:smar_bin/modules/Terms.dart';
 import 'package:smar_bin/services/api_service.dart';
 import 'package:smar_bin/shared/components/navigator.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({Key? key}) : super(key: key);
@@ -75,14 +76,15 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final localizations = AppLocalizations.of(context)!;
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
         backgroundColor: Colors.white,
         elevation: 0,
         leading: const BackButton(color: Colors.black),
-        title: const Text(
-          'Sign Up',
+        title: Text(
+          localizations.signUp,
           style: TextStyle(
             color: Colors.black,
             fontWeight: FontWeight.w600,

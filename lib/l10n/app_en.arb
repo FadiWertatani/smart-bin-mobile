@@ -18,5 +18,31 @@
   "amira": "Amira Isabldi",
   "nurse": "Nurse",
   "samar": "Samar Rezgui",
-  "orthopedics": "Orthopedics"
+  "orthopedics": "Orthopedics",
+  "login": "Login",
+  "emailHint": "Enter your email",
+  "passwordHint": "Enter your password",
+  "forgotPassword": "Forgot Password?",
+  "dontHaveAccount": "Don't have an account?",
+  "signUp": "Sign Up",
+  "emailRequired": "Email and Password are necessary",
+  "invalidEmail": "Email Invalid!",
+  "incorrectPassword": "Password Incorrect!",
+  "connectionError": "Connection error",
+  "title": "Welcome to MyApp",
+  "signIn": "Sign In",
+  "termsOfService": "Terms of Service",
+  "privacyPolicy": "Privacy Policy",
+  "alreadyHaveAccount": "Already have an account?",
+  "errorMessage": "An error occurred. Please try again.",
+  "passwordValidMessage": "Password must contain at least 8 characters, including an uppercase letter, a lowercase letter, a number, and a special character.",
+  "appTitle": "My App",
+  "greeting": "Hello, {name}!",
+  "welcomeMessage": "Welcome to the app!",
+  "@greeting": {
+    "description": "A greeting message",
+    "placeholders": {
+      "name": {}
+    }
+  }
 }

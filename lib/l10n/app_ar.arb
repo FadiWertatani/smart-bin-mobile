@@ -18,5 +18,34 @@
   "amira": "أميرة إيسبلدي",
   "nurse": "ممرضة",
   "samar": "سمر رزقي",
-  "orthopedics": "جراحة العظام"
+  "orthopedics": "جراحة العظام",
+  "Login": "تسجيل الدخول",
+  "login": "تسجيل الدخول",
+  "emailHint": "أدخل بريدك الإلكتروني",
+  "passwordHint": "أدخل كلمة المرور",
+  "forgotPassword": "هل نسيت كلمة المرور؟",
+  "dontHaveAccount": "ليس لديك حساب؟",
+  "signUp": "سجّل الآن",
+  "emailRequired": "البريد الإلكتروني وكلمة المرور مطلوبان",
+  "invalidEmail": "البريد الإلكتروني غير صالح!",
+  "incorrectPassword": "كلمة المرور غير صحيحة!",
+  "connectionError": "خطأ في الاتصال",
+  "title": "مرحبًا بك في MyApp",
+  "signIn": "تسجيل الدخول",
+  "termsOfService": "شروط الخدمة",
+  "privacyPolicy": "سياسة الخصوصية",
+  "alreadyHaveAccount": "هل لديك حساب؟",
+  "errorMessage": "حدث خطأ. يرجى المحاولة مرة أخرى.",
+  "passwordValidMessage": "يجب أن يحتوي كلمة المرور على 8 أحرف على الأقل، بما في ذلك حرف كبير، وحرف صغير، ورقم، ورمز خاص.",
+  "appTitle": "تطبيقي",
+  "greeting": "مرحبًا، {name}!",
+  "welcomeMessage": "مرحبًا بك في التطبيق!",
+  "homeTitle": "الصفحة الرئيسية",
+  "settingsTitle": "الإعدادات",
+  "@greeting": {
+    "description": "رسالة تحية",
+    "placeholders": {
+      "name": {}
+    }
+  }
 }

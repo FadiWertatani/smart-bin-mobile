@@ -18,5 +18,32 @@
   "amira": "Amira Isabldi",
   "nurse": "Infirmière",
   "samar": "Samar Rezgui",
-  "orthopedics": "Orthopédie"
+  "orthopedics": "Orthopédie",
+  "Login": "Se connecter",
+  "login": "Connexion",
+  "emailHint": "Entrez votre email",
+  "passwordHint": "Entrez votre mot de passe",
+  "forgotPassword": "Mot de passe oublié ?",
+  "dontHaveAccount": "Vous n'avez pas de compte ?",
+  "signUp": "S'inscrire",
+  "emailRequired": "Email et mot de passe obligatoires",
+  "invalidEmail": "Email invalide !",
+  "incorrectPassword": "Mot de passe incorrect !",
+  "connectionError": "Erreur de connexion",
+  "title": "Bienvenue sur MyApp",
+  "signIn": "Se connecter",
+  "termsOfService": "Conditions d'utilisation",
+  "privacyPolicy": "Politique de confidentialité",
+  "alreadyHaveAccount": "Vous avez déjà un compte?",
+  "errorMessage": "Une erreur s'est produite. Veuillez réessayer.",
+  "passwordValidMessage": "Le mot de passe doit contenir au moins 8 caractères, dont une lettre majuscule, une lettre minuscule, un chiffre et un caractère spécial.",
+  "appTitle": "Mon application",
+  "greeting": "Bonjour, {name}!",
+  "welcomeMessage": "Bienvenue dans l'application!",
+  "@greeting": {
+    "description": "Un message de salutation",
+    "placeholders": {
+      "name": {}
+    }
+  }
 }

@@ -6,6 +6,8 @@ import 'package:smar_bin/services/SharedPrefsHelper.dart';
 import 'package:smar_bin/services/api_service.dart';
 import 'package:smar_bin/shared/components/component.dart';
 import 'package:smar_bin/shared/components/navigator.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 
 class LoginScreen extends StatefulWidget {
 
@@ -79,15 +81,16 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final localizations = AppLocalizations.of(context)!;
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
         backgroundColor: Colors.white,
         elevation: 0,
         leading: const BackButton(color: Colors.black),
-        title: const Text(
-          'Login',
-          style: TextStyle(
+        title: Text(
+          AppLocalizations.of(context)!.login,
+          style: const TextStyle(
             color: Colors.black,
             fontWeight: FontWeight.w600,
           ),
@@ -112,7 +115,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   child: TextField(
                     controller: _emailController,
                     decoration: InputDecoration(
-                      hintText: 'Enter your email',
+                      hintText: localizations.emailHint,
                       hintStyle: TextStyle(color: Colors.grey.shade500),
                       prefixIcon: Icon(Iconsax.direct, color: Colors.grey.shade500),
                       border: InputBorder.none,
@@ -132,7 +135,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     controller: _passwordController,
                     obscureText: _obscurePassword,
                     decoration: InputDecoration(
-                      hintText: 'Enter your password',
+                      hintText: localizations.passwordHint,
                       hintStyle: TextStyle(color: Colors.grey.shade500),
                       prefixIcon: Icon(Iconsax.lock, color: Colors.grey.shade500),
                       suffixIcon: GestureDetector(
@@ -165,8 +168,8 @@ class _LoginScreenState extends State<LoginScreen> {
                       minimumSize: Size.zero,
                       tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                     ),
-                    child: const Text(
-                      'Forgot Password?',
+                    child: Text(
+                      localizations.forgotPassword,
                       style: TextStyle(
                         fontSize: 14,
                         fontWeight: FontWeight.w500,
@@ -192,8 +195,8 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                     child: _isLoading
                         ? const CircularProgressIndicator(color: Colors.white)
-                        : const Text(
-                      'Login',
+                        : Text(
+                      localizations.login,
                       style: TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.w500,
@@ -208,7 +211,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      "Don't have an account? ",
+                      localizations.dontHaveAccount,
                       style: TextStyle(
                         color: Colors.grey.shade600,
                         fontSize: 14,
@@ -219,7 +222,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         normalPush(context: context, direction: RegisterScreen());
                       },
                       child: Text(
-                        "Sign Up",
+                        " ${localizations.signUp}",
                         style: TextStyle(
                           color: Theme.of(context).primaryColor,
                           fontWeight: FontWeight.w600,
