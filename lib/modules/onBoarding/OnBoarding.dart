@@ -48,11 +48,13 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     // TODO: implement initState
     super.initState();
     getLang();
+    print(SharedPrefsHelper.getOnBoarding());
   }
 
   Future<void> getLang() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    String langCode = prefs.getString('language') ?? 'en';  // Default to 'en' if no preference is found
+    String langCode = prefs.getString('language') ??
+        'en'; // Default to 'en' if no preference is found
   }
 
   @override
@@ -62,10 +64,11 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
         actions: [
           TextButton(
             onPressed: () {
+              completeOnboarding(context);
               noBackPush(
                 context: context,
                 direction: AuthScreen(),
-              ).then((_)=>SharedPrefsHelper.saveOnBoarding(true));
+              );
             },
             child: const Text(
               'SKIP',
@@ -104,19 +107,24 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                 SmoothPageIndicator(
                   controller: _boardingController,
                   effect: WormEffect(
-                    activeDotColor: Theme.of(context).primaryColor,
+                    activeDotColor: Theme
+                        .of(context)
+                        .primaryColor,
                   ),
                   count: boarding.length,
                 ),
                 const Spacer(),
                 FloatingActionButton(
-                  backgroundColor: Theme.of(context).primaryColor,
+                  backgroundColor: Theme
+                      .of(context)
+                      .primaryColor,
                   onPressed: () {
                     if (isLast == true) {
+                      completeOnboarding(context);
                       noBackPush(
                         context: context,
                         direction: AuthScreen(),
-                      ).then((_)=>SharedPrefsHelper.saveOnBoarding(true));
+                      );
                     } else {
                       _boardingController.nextPage(
                         duration: const Duration(milliseconds: 750),
@@ -134,32 +142,39 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     );
   }
 
-  Widget buildBoardingItem(OnBoardingModel model) => Column(
-    crossAxisAlignment: CrossAxisAlignment.start,
-    children: [
-      Expanded(
-        child: Image(
-          image: AssetImage(model.image),
-        ),
-      ),
-      const SizedBox(height: 30.0),
-      Text(
-        model.title,
-        style: const TextStyle(
-            fontSize: 24.0,
-            fontWeight: FontWeight.w600
-        ),
-      ),
-      const SizedBox(height: 12.0),
-      Text(
-        model.body,
-        style: const TextStyle(
-          fontSize: 14.0,
-        ),
-      ),
-    ],
-  );
+  Widget buildBoardingItem(OnBoardingModel model) =>
+      Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Expanded(
+            child: Image(
+              image: AssetImage(model.image),
+            ),
+          ),
+          const SizedBox(height: 30.0),
+          Text(
+            model.title,
+            style: const TextStyle(
+                fontSize: 24.0,
+                fontWeight: FontWeight.w600
+            ),
+          ),
+          const SizedBox(height: 12.0),
+          Text(
+            model.body,
+            style: const TextStyle(
+              fontSize: 14.0,
+            ),
+          ),
+        ],
+      );
 }
+
+void completeOnboarding(BuildContext context) async {
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  await prefs.setBool('onBoardingSeen', true);
+}
+
 
 class OnBoardingModel {
   final String image;
