@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:smar_bin/services/SharedPrefsHelper.dart';
 
+import '../main.dart';
+
 class LanguageSelectionScreen extends StatefulWidget {
   const LanguageSelectionScreen({Key? key}) : super(key: key);
 
@@ -173,6 +175,9 @@ class _LanguageSelectionScreenState extends State<LanguageSelectionScreen> {
               onPressed: () async {
                 // Save the selected language
                 await _saveSelectedLanguage(_selectedLanguage);
+
+                // Change the app locale
+                myAppKey.currentState?.setLocale(Locale(_selectedLanguage));
 
                 // Get and print the saved language
                 String selectedLang = await getSelectedLanguage();
