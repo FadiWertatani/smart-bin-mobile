@@ -242,6 +242,28 @@ class ApiService {
     }
   }
 
+  Future<String?> getUserRoleByEmail(String email) async {
+    try {
+      final response = await _dio.get('/api/user/$email');
+
+      if (response.statusCode == 200 && response.data is List && response.data.isNotEmpty) {
+        final role = response.data[0]['role'];
+        return role;
+      } else {
+        print('No user found or unexpected response');
+        return null;
+      }
+    } on DioException catch (e) {
+      print('Error fetching user role: ${e.message}');
+      return null;
+    }
+  }
+
+
+
+
+
+
 
 //
   // // Fetch staff list based on clinic

@@ -73,31 +73,31 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
 
             // Search bar
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: Container(
-                padding: const EdgeInsets.symmetric(horizontal: 16),
-                decoration: BoxDecoration(
-                  color: Colors.grey.shade100,
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                child: const Row(
-                  children: [
-                    Icon(Icons.search, color: Colors.grey),
-                    SizedBox(width: 8),
-                    Expanded(
-                      child: TextField(
-                        decoration: InputDecoration(
-                          hintText: 'Search doctor, articles...',
-                          hintStyle: TextStyle(color: Colors.grey),
-                          border: InputBorder.none,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
+            // Padding(
+            //   padding: const EdgeInsets.symmetric(horizontal: 20),
+            //   child: Container(
+            //     padding: const EdgeInsets.symmetric(horizontal: 16),
+            //     decoration: BoxDecoration(
+            //       color: Colors.grey.shade100,
+            //       borderRadius: BorderRadius.circular(8),
+            //     ),
+            //     child: const Row(
+            //       children: [
+            //         Icon(Icons.search, color: Colors.grey),
+            //         SizedBox(width: 8),
+            //         Expanded(
+            //           child: TextField(
+            //             decoration: InputDecoration(
+            //               hintText: 'Search doctor, articles...',
+            //               hintStyle: TextStyle(color: Colors.grey),
+            //               border: InputBorder.none,
+            //             ),
+            //           ),
+            //         ),
+            //       ],
+            //     ),
+            //   ),
+            // ),
 
             const SizedBox(height: 24),
 
@@ -113,28 +113,28 @@ class _HomeScreenState extends State<HomeScreen> {
                 child: Row(
                   children: [
                     // Left text section
-                    const Expanded(
+                    Expanded(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(
+                          const Text(
                             'Dispose smart.',
                             style: TextStyle(
                               fontSize: 18,
                               fontWeight: FontWeight.bold,
                             ),
                           ),
-                          Text(
+                          const Text(
                             'Get rewarded.',
                             style: TextStyle(
                               fontSize: 18,
                               fontWeight: FontWeight.w500,
                             ),
                           ),
-                          SizedBox(height: 12),
+                          const SizedBox(height: 12),
                           ElevatedButton(
-                            onPressed: null,
-                            style: ButtonStyle(
+                            onPressed: () => normalPush(context: context, direction: QrCodeScreen()),
+                            style: const ButtonStyle(
                               backgroundColor:
                                   MaterialStatePropertyAll(Color(0xff015ff3)),
                               padding: MaterialStatePropertyAll(
@@ -142,7 +142,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                     horizontal: 16, vertical: 8),
                               ),
                             ),
-                            child: Text(
+                            child: const Text(
                               'Get QR Code',
                               style: TextStyle(color: Colors.white),
                             ),
@@ -171,26 +171,26 @@ class _HomeScreenState extends State<HomeScreen> {
             const SizedBox(height: 24),
 
             // Top Staff section
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  const Text(
-                    'Top Staff',
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  TextButton(
-                    onPressed: () {},
-                    child: const Text('See all',
-                        style: TextStyle(color: Colors.blue)),
-                  ),
-                ],
-              ),
-            ),
+            // Padding(
+            //   padding: const EdgeInsets.symmetric(horizontal: 20),
+            //   child: Row(
+            //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            //     children: [
+            //       const Text(
+            //         'Top Staff',
+            //         style: TextStyle(
+            //           fontSize: 18,
+            //           fontWeight: FontWeight.bold,
+            //         ),
+            //       ),
+            //       TextButton(
+            //         onPressed: () {},
+            //         child: const Text('See all',
+            //             style: TextStyle(color: Colors.blue)),
+            //       ),
+            //     ],
+            //   ),
+            // ),
 
             const SizedBox(height: 8),
 

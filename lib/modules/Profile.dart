@@ -5,7 +5,9 @@ import 'package:iconsax/iconsax.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:smar_bin/models/User.dart';
 import 'package:smar_bin/modules/Auth.dart';
+import 'package:smar_bin/modules/FAQ.dart';
 import 'package:smar_bin/modules/LanguageSettings.dart';
+import 'package:smar_bin/modules/Terms.dart';
 import 'package:smar_bin/services/SharedPrefsHelper.dart';
 import 'package:smar_bin/services/api_service.dart';
 import 'package:smar_bin/shared/components/component.dart';
@@ -106,10 +108,12 @@ class _ProfileState extends State<Profile> {
                     buildSettingsItem(
                         icon: Icons.help_outline,
                         label: 'Help',
+                        direction: FAQ(),
                         context: context),
                     buildSettingsItem(
                         icon: Icons.rule,
                         label: 'Terms & Conditions',
+                        direction: Terms(),
                         context: context),
                     buildSettingsItem(
                         icon: Icons.privacy_tip,

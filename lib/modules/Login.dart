@@ -4,6 +4,7 @@ import 'package:smar_bin/layout/CollectorLayout.dart';
 import 'package:smar_bin/layout/HomeLayout.dart';
 import 'package:smar_bin/modules/CollectorHomeScreen.dart';
 import 'package:smar_bin/modules/Register.dart';
+import 'package:smar_bin/services/SharedPrefsHelper.dart';
 import 'package:smar_bin/services/api_service.dart';
 import 'package:smar_bin/shared/components/component.dart';
 import 'package:smar_bin/shared/components/navigator.dart';
@@ -229,7 +230,9 @@ class _LoginScreenState extends State<LoginScreen> {
         await Future.delayed(const Duration(seconds: 1));
 
         if (mounted) {
-          noBackPush(context: context, direction: CollectorLayout());
+          //Here
+          // noBackPush(context: context, direction: CollectorLayout());
+          _fetchUserRole(email);
         }
       }
     } catch (e) {
@@ -241,5 +244,80 @@ class _LoginScreenState extends State<LoginScreen> {
       _isLoading = false;
     });
   }
+
+
+  void _fetchUserRole(String email) async {
+
+    String? role = await ApiService().getUserRoleByEmail(email);
+
+    if (role != null) {
+      // Print the role (you can replace this with actual UI updates or logging)
+      print('User role: $role');
+
+      // Redirection based on the role
+      if (role == 'user') {
+        // Redirect to Admin Dashboard screen
+        noBackPush(context: context, direction: HomeLayout());
+      } else if (role == 'COLLECTOR') {
+        // Redirect to User Home screen
+        noBackPush(context: context, direction: CollectorLayout());
+      } else {
+        // Handle other roles or show an error
+        flutterToast(message: 'Unknown role: $role', backgroundColor: Colors.orangeAccent);
+        // Optionally, redirect to an error screen
+      }
+    } else {
+      print('Error fetching user role');
+      // Optionally, redirect to an error screen if the role is null
+      Navigator.pushReplacementNamed(context, '/error');
+    }
+  }
+
+
+
+// void checkRoleAndNavigate(BuildContext context) async {
+  //   try {
+  //     final token = await SharedPrefsHelper.getToken();
+  //
+  //     if (token == null) {
+  //       ScaffoldMessenger.of(context).showSnackBar(
+  //         const SnackBar(content: Text('Token not found')),
+  //       );
+  //       return;
+  //     }
+  //
+  //     final api = ApiService();
+  //     final role = await api.getUserRoleByEmail(_emailController.text.trim());
+  //
+  //     if (role == null) {
+  //       ScaffoldMessenger.of(context).showSnackBar(
+  //         const SnackBar(content: Text('Could not fetch role')),
+  //       );
+  //       return;
+  //     }
+  //
+  //     final normalizedRole = role.toLowerCase();
+  //
+  //     switch (normalizedRole) {
+  //       case 'user':
+  //         noBackPush(context: context, direction: HomeLayout());
+  //         break;
+  //       case 'collector':
+  //         noBackPush(context: context, direction: CollectorLayout());
+  //         break;
+  //       default:
+  //         flutterToast(
+  //           message: "This role is not permitted here",
+  //           backgroundColor: Colors.orangeAccent,
+  //         );
+  //     }
+  //   } catch (e) {
+  //     print('Error during role check and navigation: $e');
+  //     ScaffoldMessenger.of(context).showSnackBar(
+  //       const SnackBar(content: Text('An unexpected error occurred')),
+  //     );
+  //   }
+  // }
+
 
 }
