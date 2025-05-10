@@ -261,48 +261,30 @@ class ApiService {
 
 
 
+  Future<bool> updatePointsGoal(String email, int pointsGoal) async {
+    try {
+      final response = await _dio.put(
+        '/api/user/points-goal',
+        data: {
+          'email': email,
+          'points_goal': pointsGoal,
+        },
+      );
+
+      if (response.statusCode == 200) {
+        print('Points goal updated successfully');
+        return true;
+      } else {
+        print('Failed to update points goal: ${response.statusCode}');
+        return false;
+      }
+    } on DioException catch (e) {
+      print('Error updating points goal: ${e.message}');
+      return false;
+    }
+  }
 
 
 
 
-//
-  // // Fetch staff list based on clinic
-  // Future<List<Map<String, dynamic>>> fetchStaffsList(String clinic) async {
-  //   try {
-  //     Response response =
-  //         await _dio.get('/staff', queryParameters: {'clinic': clinic});
-  //
-  //     if (response.statusCode == 200) {
-  //       // Returning the list of doctors
-  //       return List<Map<String, dynamic>>.from(response.data);
-  //     } else {
-  //       return [];
-  //     }
-  //   } catch (e) {
-  //     print('Error fetching staff list: $e');
-  //     return [];
-  //   }
-  // }
-  //
-  // Future<Map<String, dynamic>> getUserData(String userCode) async {
-  //   try {
-  //     Response response = await _dio.get('/user/$userCode/data');
-  //     if (response.statusCode == 200) {
-  //       return response.data;
-  //     } else {
-  //       return {
-  //         'error': 'Erreur lors de la récupération des données',
-  //         'name': '',
-  //         'points': [],
-  //       };
-  //     }
-  //   } catch (e) {
-  //     print('Error getting user data: $e');
-  //     return {
-  //       'error': 'Erreur lors de la récupération des données',
-  //       'name': '',
-  //       'points': [],
-  //     };
-  //   }
-  // }
 }

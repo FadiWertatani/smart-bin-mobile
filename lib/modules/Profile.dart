@@ -6,6 +6,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:smar_bin/models/User.dart';
 import 'package:smar_bin/modules/Auth.dart';
 import 'package:smar_bin/modules/FAQ.dart';
+import 'package:smar_bin/modules/GiftPointsSelectionScreen.dart';
 import 'package:smar_bin/modules/LanguageSettings.dart';
 import 'package:smar_bin/modules/Terms.dart';
 import 'package:smar_bin/services/SharedPrefsHelper.dart';
@@ -96,6 +97,7 @@ class _ProfileState extends State<Profile> {
                     buildSettingsItem(
                         icon: Icons.card_giftcard,
                         label: 'Mobile Reward',
+                        direction: GiftPointsSelectionScreen(),
                         context: context),
                     buildSettingsItem(
                         icon: Iconsax.edit, label: 'Infos', context: context),
