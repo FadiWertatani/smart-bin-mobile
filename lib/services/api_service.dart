@@ -174,6 +174,30 @@ class ApiService {
     }
   }
 
+  /// Fetch gift points by email
+  Future<int?> getPointsGoalByEmail(String email) async {
+    try {
+      final response = await _dio.get('/api/users/points-goal/$email');
+
+      if (response.statusCode == 200) {
+        return response.data['points_goal'];
+      } else if (response.statusCode == 404) {
+        print('Data not found');
+        return null;
+      } else {
+        print('Unexpected error: ${response.statusCode}');
+        return null;
+      }
+    } on DioException catch (e) {
+      print('Dio error: ${e.message}');
+      return null;
+    } catch (e) {
+      print('Unknown error: $e');
+      return null;
+    }
+  }
+
+
   // // Fetch user code method (new method)
   // Future<String?> fetchUserCode(String email) async {
   //   try {

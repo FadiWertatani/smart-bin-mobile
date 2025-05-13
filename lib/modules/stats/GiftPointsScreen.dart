@@ -13,8 +13,11 @@ class GiftPointsScreen extends StatefulWidget {
 
 class _GiftPointsScreenState extends State<GiftPointsScreen> {
   int? giftPoints;
-  final int maxPoints = 100;
+  int? pointsGoal;
+
+  // final int maxPoints = 100;
   bool isLoading = true;
+  bool isLoading1 = true;
 
   @override
   void initState() {
@@ -26,6 +29,8 @@ class _GiftPointsScreenState extends State<GiftPointsScreen> {
     final email = await SharedPrefsHelper.getEmail();
     print("2222 " + email.toString());
     await fetchGiftPoints(email);
+    await fetchPointsGoal(email);
+    print("TEST: " + pointsGoal.toString());
   }
 
 
@@ -36,6 +41,16 @@ class _GiftPointsScreenState extends State<GiftPointsScreen> {
     setState(() {
       giftPoints = points;
       isLoading = false;
+    });
+  }
+
+  Future<void> fetchPointsGoal(String? email) async {
+    if (email == null) return;
+
+    final points = await ApiService().getPointsGoalByEmail(email);
+    setState(() {
+      pointsGoal = points;
+      isLoading1 = false;
     });
   }
 
@@ -76,18 +91,18 @@ class _GiftPointsScreenState extends State<GiftPointsScreen> {
         elevation: 0,
         toolbarHeight: 80,
       ),
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(24.0),
-            child: isLoading
-                ? const CircularProgressIndicator()
-                : giftPoints != null
-                ? GiftPointsWidget(points: giftPoints!.toDouble(), maxPoints: maxPoints.toDouble())
-                : const Text('Unable to load gift points'),
-          ),
-        ],
+      body: Center(
+        child: Padding(
+          padding: const EdgeInsets.all(24.0),
+          child: (isLoading || isLoading1)
+              ? const CircularProgressIndicator()
+              : (giftPoints != null && pointsGoal != null)
+              ? GiftPointsWidget(
+            points: giftPoints!.toDouble(),
+            maxPoints: pointsGoal!.toDouble(),
+          )
+              : const Text('Unable to load gift points'),
+        ),
       ),
     );
   }

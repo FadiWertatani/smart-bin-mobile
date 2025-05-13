@@ -47,7 +47,7 @@ class _GiftPointsSelectionScreenState extends State<GiftPointsSelectionScreen> {
                 color: Colors.black,
               ),
             ),
-            SizedBox(height: 4), // Added spacing between texts
+            SizedBox(height: 4),
             Text(
               'Choose the reward you are aiming for',
               style: TextStyle(
@@ -65,9 +65,11 @@ class _GiftPointsSelectionScreenState extends State<GiftPointsSelectionScreen> {
         ),
         backgroundColor: Colors.white,
         elevation: 0,
-        toolbarHeight: 80, // Increased from 70 to 80
+        toolbarHeight: 80,
       ),
-      body: Column(
+      body: isLoading
+          ? const Center(child: CircularProgressIndicator())
+          : Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Container(
@@ -77,7 +79,7 @@ class _GiftPointsSelectionScreenState extends State<GiftPointsSelectionScreen> {
               children: [
                 Icon(Icons.stars, size: 28, color: Theme.of(context).primaryColor),
                 SizedBox(width: 10),
-                Text('Your Points: ${userPoints}', style: TextStyle(fontSize: 20)),
+                Text('Your Points: $userPoints', style: TextStyle(fontSize: 20)),
               ],
             ),
           ),
@@ -117,6 +119,7 @@ class _GiftPointsSelectionScreenState extends State<GiftPointsSelectionScreen> {
       ),
     );
   }
+
 
   Future<void> init() async {
     final storedEmail = await SharedPrefsHelper.getEmail();
